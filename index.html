@@ -26,9 +26,8 @@
  }
  .hidden { display: none !important; }
 
- /* MODIFICATION START: Styles for top bar controls container */
  #top-bar-controls {
-  position: fixed;
+  position: absolute; /* MODIFIED: from fixed to absolute */
   top: 0;
   left: 0;
   width: 100%;
@@ -37,13 +36,12 @@
   align-items: center;
   padding: 5px 5px;
   box-sizing: border-box;
-  z-index: 9999;
+  z-index: 15; /* MODIFIED */
  }
  .version-display {
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.4);
  }
- /* MODIFICATION END */
 
  /* --- Instruction Screen Styles (from File 2) --- */
  #instructionScreen {
@@ -52,7 +50,6 @@
  position: relative;
  }
  .close-btn {
-  /* MODIFIED: Positioning is now handled by flex container */
   font-size: 2rem;
   color: #f0f0f0;
   cursor: pointer;
@@ -61,7 +58,6 @@
   z-index: 10;
  }
  .sound-toggle {
-  /* MODIFIED: Positioning is now handled by flex container */
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
@@ -218,16 +214,16 @@
  </style>
 </head>
 <body>
-<!-- MODIFICATION START: All top-bar controls are now in a flex container for alignment -->
-<div id="top-bar-controls">
- <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
- <div class="version-display">v 1.6</div>
- <div id="soundToggle" class="sound-toggle">s</div>
-</div>
-<!-- MODIFICATION END -->
 
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
+ <!-- MODIFICATION START: Controls moved inside instruction screen -->
+ <div id="top-bar-controls">
+  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
+  <div class="version-display">v 1.7</div>
+  <div id="soundToggle" class="sound-toggle">s</div>
+ </div>
+ <!-- MODIFICATION END -->
  <div class="content">
  <h1>Testing space scan<br>instructions</h1>
  <ul>
@@ -243,17 +239,14 @@
 
 <!-- =========== MAIN APP (File 1 structure with File 2 visuals) =========== -->
 <div class="app-container hidden">
- <!-- MODIFICATION START: App Header Added -->
  <header class="app-header">
   <svg class="header-icon" viewBox="0 0 24 24"><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"></path></svg>
   <span>Capture testing space scan</span>
  </header>
- <!-- MODIFICATION END -->
  <div class="main-content">
  <div class="camera-view-container" id="camera-view-container">
   <div class="camera-view" id="camera-view">
   <video id="video-feed" autoplay playsinline muted></video>
-  <!-- Visual Overlays from File 2 -->
   <div class="scan-overlay"></div>
   <div id="scanArrowContainer" class="scan-arrow">
    <svg viewBox="0 0 23 30">
@@ -261,7 +254,6 @@
    </svg>
   </div>
   <div id="scanLine" class="scan-line"></div>
-  <!-- Structure for the message box -->
   <div id="instructionMessageBox">
     <span id="instructionMessageText"></span>
     <a id="instructionResetLink" class="hidden">Let's start over and give it another try.</a>
@@ -318,6 +310,7 @@
  let imageCaptureController = null;
  let isCapturing = false;
  let isSoundEnabled = false;
+ let alignmentHoldTimer = null; // MODIFICATION
 
  const TARGET_PITCH = 80;
  const DEGREES_PER_FRAME = 60;
@@ -326,6 +319,8 @@
 
  // Alignment tolerances
  const PITCH_TOLERANCE_GOOD = 5;
+ const PITCH_TOLERANCE_COUNTDOWN = PITCH_TOLERANCE_GOOD / 2; // MODIFICATION
+ const ALIGNMENT_HOLD_TIME = 500; // MODIFICATION
  const PITCH_TOLERANCE_OK = 10;
  const PITCH_SCAN_TOLERANCE = 5;
  const ROLL_SCAN_TOLERANCE = 20;
@@ -439,7 +434,9 @@
 
  // --- Countdown and Scan Start Logic ---
  function startCountdownSequence() {
+ if (isCountdownActive) return; // Prevent multiple triggers
  isCountdownActive = true;
+ alignmentHoldTimer = null; // Clear timer once it has succeeded
  hideInstructionMessage();
  countdownDisplay.style.display = 'block';
 
@@ -501,13 +498,24 @@
   scanArrowContainer.style.left = '10px';
 
   const deviation = Math.abs(pitchOffset);
+  
+  // Visual indicator (wider tolerance)
   if (deviation < PITCH_TOLERANCE_GOOD) {
-  arrowShape.style.fill = COLOR_GOOD;
-  if (!isCountdownActive) {
-   startCountdownSequence();
-  }
+    arrowShape.style.fill = COLOR_GOOD;
   } else {
-   arrowShape.style.fill = COLOR_OK;
+    arrowShape.style.fill = COLOR_OK;
+  }
+
+  // Countdown trigger (tighter tolerance with hold timer)
+  if (deviation < PITCH_TOLERANCE_COUNTDOWN) {
+    if (alignmentHoldTimer === null && !isCountdownActive) {
+      alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
+    }
+  } else {
+    if (alignmentHoldTimer) {
+      clearTimeout(alignmentHoldTimer);
+      alignmentHoldTimer = null;
+    }
   }
  } else if (scanState === 'scanning') {
   let degreesRotated = (startHeading - currentHeading + 360) % 360;
@@ -703,6 +711,11 @@
     videoStream = null;
   }
   clearTimeout(beepTimeoutId);
+  // MODIFICATION START: Full state reset
+  if (alignmentHoldTimer) {
+    clearTimeout(alignmentHoldTimer);
+    alignmentHoldTimer = null;
+  }
   scanState = 'pre-scan';
   capturedFrames = [];
   targetHeadings = [];
@@ -712,6 +725,7 @@
   startHeading = 0;
   isCountdownActive = false;
   smoothedAngularVelocity = 0;
+  // MODIFICATION END
    
   progressDisplay.innerHTML = '';
   hideInstructionMessage();
