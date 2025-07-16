@@ -171,17 +171,15 @@
   transition: left 0.1s linear;
  }
  #arrow-shape { transition: fill 0.2s linear; }
- /* MODIFICATION START: Styles for completion checkmark */
  #completion-check {
   position: absolute;
-  width: 40px; /* MODIFIED */
-  height: 40px; /* MODIFIED */
+  width: 28px; /* MODIFIED */
+  height: 28px; /* MODIFIED */
   top: 50%;
   left: 50%;
   transform: translate(-50%, calc(-50% + 10px)); /* MODIFIED */
   z-index: 1;
  }
- /* MODIFICATION END */
  .scan-line {
  position: absolute;
  top: calc(50% + 13px);
@@ -302,9 +300,11 @@
    <svg viewBox="0 0 23 30">
     <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
    </svg>
+    <!-- MODIFICATION START: Checkmark SVG updated for new style -->
     <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="white"/>
+        <path d="M2,14 L9,21 L22,3 L21,4 L9,18 L4,13 Z" fill="white"/>
     </svg>
+    <!-- MODIFICATION END -->
   </div>
   <div id="scanLine" class="scan-line"></div>
   <div id="instructionMessageBox">
