@@ -27,7 +27,7 @@
  .hidden { display: none !important; }
 
  #top-bar-controls {
-  position: absolute; /* MODIFIED: from fixed to absolute */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -36,7 +36,7 @@
   align-items: center;
   padding: 5px 5px;
   box-sizing: border-box;
-  z-index: 15; /* MODIFIED */
+  z-index: 15;
  }
  .version-display {
   font-size: 0.7rem;
@@ -142,6 +142,23 @@
  #video-feed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
  /* --- Overlays for Video (from File 2) --- */
+ /* MODIFICATION START: Video overlay styles added */
+ #video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  z-index: 5;
+  pointer-events: none;
+ }
+ #video-overlay.overlay-yellow { background-color: rgba(241, 196, 15, 0.15); }
+ #video-overlay.overlay-green { background-color: rgba(163, 230, 53, 0.15); }
+ #video-overlay.overlay-red { background-color: rgba(231, 76, 60, 0.2); }
+ /* MODIFICATION END */
+
  .scan-overlay {
  position: absolute; top: 2%; left: 5%; right: 5%; bottom: 2%;
  border: 3px dashed rgba(255, 255, 255, 0.7); border-radius: 10px;
@@ -149,7 +166,7 @@
  .scan-arrow {
  position: absolute; left: 10px;
  width: 58px; height: 43px; transition: top 0.1s linear, left 0.1s linear;
- z-index: 22; /* MODIFIED: Set z-index to be on top */
+ z-index: 22;
  }
  #arrow-shape { transition: fill 0.2s linear; }
  .scan-line {
@@ -180,9 +197,9 @@
   margin-top: 0.75rem;
   color: #007BFF;
   text-decoration: underline;
-  font-weight: 500; /* MODIFIED: Restored original weight */
+  font-weight: 500;
   cursor: pointer;
-   font-size: 0.9rem; /* MODIFIED: Restored original size */
+   font-size: 0.9rem;
  }
  #countdownDisplay {
  display: none; position: absolute; top: 50%; left: 50%;
@@ -217,13 +234,11 @@
 
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
- <!-- MODIFICATION START: Controls moved inside instruction screen -->
  <div id="top-bar-controls">
   <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.7</div>
+  <div class="version-display">v 1.8</div>
   <div id="soundToggle" class="sound-toggle">s</div>
  </div>
- <!-- MODIFICATION END -->
  <div class="content">
  <h1>Testing space scan<br>instructions</h1>
  <ul>
@@ -247,6 +262,7 @@
  <div class="camera-view-container" id="camera-view-container">
   <div class="camera-view" id="camera-view">
   <video id="video-feed" autoplay playsinline muted></video>
+  <div id="video-overlay"></div><!-- MODIFICATION: New overlay element -->
   <div class="scan-overlay"></div>
   <div id="scanArrowContainer" class="scan-arrow">
    <svg viewBox="0 0 23 30">
@@ -285,6 +301,7 @@
  const appContainer = document.querySelector('.app-container');
  const cameraViewContainer = document.getElementById('camera-view-container');
  const videoElement = document.getElementById('video-feed');
+ const videoOverlay = document.getElementById('video-overlay'); // MODIFICATION
  const scanArrowContainer = document.getElementById('scanArrowContainer');
  const arrowShape = document.getElementById('arrow-shape');
  const scanLine = document.getElementById('scanLine');
@@ -422,6 +439,7 @@
   instructionScreen.classList.add('hidden');
   appContainer.classList.remove('hidden');
   showInstructionMessage("Align the arrow with the red line to begin countdown.");
+  videoOverlay.className = 'overlay-yellow'; // MODIFICATION
  } catch (err) {
   console.error("Camera error:", err);
   permissionError.textContent = "Camera access denied. Please check settings.";
@@ -459,6 +477,7 @@
  }
 
  async function beginCaptureProcess() {
+ videoOverlay.className = ''; // MODIFICATION
  scanState = 'scanning';
  startHeading = currentHeading;
  targetHeadings = [];
@@ -562,6 +581,7 @@
 
   if (isDangerCondition) {
     scanState = 'error';
+    videoOverlay.className = 'overlay-red'; // MODIFICATION
     arrowShape.style.fill = COLOR_BAD;
     showInstructionMessage("You rotated the camera too quickly, but you're doing great!", true);
     clearTimeout(messageHideTimeout);
@@ -578,7 +598,6 @@
       messageHideTimeout = setTimeout(() => {
         hideInstructionMessage();
         arrowShape.style.fill = COLOR_GOOD;
-        messageHideTimeout = null;
       }, 500);
     }
     if (!messageHideTimeout) {
@@ -612,6 +631,7 @@
    if (capturedFrames.length >= TOTAL_FRAMES) {
     scanState = 'complete';
     hideInstructionMessage();
+    videoOverlay.className = 'overlay-green'; // MODIFICATION
     clearTimeout(beepTimeoutId);
     scanArrowContainer.style.left = 'calc(95% - 68px)';
     scanArrowContainer.style.top = 'calc(50% - 24.5px)';
@@ -711,7 +731,6 @@
     videoStream = null;
   }
   clearTimeout(beepTimeoutId);
-  // MODIFICATION START: Full state reset
   if (alignmentHoldTimer) {
     clearTimeout(alignmentHoldTimer);
     alignmentHoldTimer = null;
@@ -725,10 +744,10 @@
   startHeading = 0;
   isCountdownActive = false;
   smoothedAngularVelocity = 0;
-  // MODIFICATION END
    
   progressDisplay.innerHTML = '';
   hideInstructionMessage();
+  videoOverlay.className = ''; // MODIFICATION
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
