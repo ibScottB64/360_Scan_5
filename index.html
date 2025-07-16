@@ -164,14 +164,12 @@
  .scan-arrow {
  position: absolute; left: 10px;
  width: 58px; height: 43px;
- transition: top 0.1s linear, left 0.1s linear, transform 0.1s linear; /* MODIFIED */
+ transition: top 0.1s linear, left 0.1s linear, transform 0.1s linear;
  z-index: 22;
  }
- /* MODIFICATION START: Arrow locking style */
  .scan-arrow.locked {
-  transition: left 0.1s linear; /* Only horizontal movement is smooth */
+  transition: left 0.1s linear;
  }
- /* MODIFICATION END */
  #arrow-shape { transition: fill 0.2s linear; }
  .scan-line {
  position: absolute;
@@ -210,6 +208,29 @@
  transform: translate(-50%, -50%); font-size: 20rem; font-weight: 700;
  color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); z-index: 25;
  }
+ /* MODIFICATION START: Styles and animation for scan start message */
+ @keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+ }
+ #scanStartMessage {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  z-index: 25;
+  text-align: center;
+  pointer-events: none;
+ }
+ #scanStartMessage.fading-out {
+  animation: fadeOut 2s ease-out forwards;
+ }
+ /* MODIFICATION END */
  .control-panel { display: none; } /* Hidden for now */
  .progress-display { display: flex; align-items: center; gap: 0; padding: 12px; overflow-x: auto; min-height: 52px; box-sizing: border-box;}
  .progress-frame { flex-shrink: 0; height: 50px; width: 37.5px; background-color: var(--secondary-bg); border-radius: 4px; border: 1px solid #CCC; background-size: cover; background-position: center; cursor: pointer; }
@@ -240,7 +261,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
   <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.9</div>
+  <div class="version-display">v 1.10</div>
   <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
@@ -279,6 +300,7 @@
     <a id="instructionResetLink" class="hidden">Let's start over and give it another try.</a>
   </div>
   <div id="countdownDisplay"></div>
+  <div id="scanStartMessage"></div><!-- MODIFICATION: New message element -->
   </div>
  </div>
  </div>
@@ -313,6 +335,7 @@
  const instructionMessageText = document.getElementById('instructionMessageText');
  const instructionResetLink = document.getElementById('instructionResetLink');
  const countdownDisplay = document.getElementById('countdownDisplay');
+ const scanStartMessage = document.getElementById('scanStartMessage'); // MODIFICATION
  const appStatus = document.getElementById('app-status');
  const progressDisplay = document.getElementById('progress-display');
  const reviewOverlay = document.getElementById('review-overlay');
@@ -484,6 +507,17 @@
  async function beginCaptureProcess() {
  videoOverlay.className = '';
  scanState = 'scanning';
+ 
+ // MODIFICATION START: Display and fade out the start message
+ scanStartMessage.textContent = "Slowly Begin Rotating";
+ scanStartMessage.style.display = 'block';
+ scanStartMessage.classList.add('fading-out');
+ setTimeout(() => {
+  scanStartMessage.style.display = 'none';
+  scanStartMessage.classList.remove('fading-out');
+ }, 2000);
+ // MODIFICATION END
+
  startHeading = currentHeading;
  targetHeadings = [];
  nextHeadingIndex = 0;
@@ -517,23 +551,6 @@
  const deviation = Math.abs(pitchOffset);
  const rollDeviation = Math.abs(smoothedRoll);
 
- // MODIFICATION START: Handle arrow locking and floating for both pre-scan and scanning
- if (scanState === 'pre-scan' || scanState === 'scanning') {
-  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
-
-  if (isInTightAlignment) {
-   scanArrowContainer.classList.add('locked');
-   scanArrowContainer.style.top = 'calc(50% - 24.5px)'; // Uses final position for reference
-   scanArrowContainer.style.transform = 'rotate(0deg)';
-  } else {
-   scanArrowContainer.classList.remove('locked');
-   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-   scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
-  }
- }
- // MODIFICATION END
-
  if (scanState === 'pre-scan') {
   // Visual indicator (wider tolerance)
   if (deviation < PITCH_TOLERANCE_GOOD) {
@@ -542,13 +559,20 @@
     arrowShape.style.fill = COLOR_OK;
   }
 
-  // Countdown trigger (tighter tolerance with hold timer)
   const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
+
   if (isInTightAlignment) {
+    scanArrowContainer.classList.add('locked');
+    scanArrowContainer.style.top = `calc(50% - 24.5px)`;
+    scanArrowContainer.style.transform = `rotate(0deg)`;
     if (alignmentHoldTimer === null && !isCountdownActive) {
       alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
     }
   } else {
+    scanArrowContainer.classList.remove('locked');
+    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
     if (alignmentHoldTimer) {
       clearTimeout(alignmentHoldTimer);
       alignmentHoldTimer = null;
@@ -591,10 +615,23 @@
     }
   }
    
+  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
+
   if (!isDangerCondition && !warningMessageToShow) {
-    if (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE) {
+    if (!isInTightAlignment && (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE)) {
       warningMessageToShow = "Realign the arrow by rotating your phone to the left or right or forward or back.";
     }
+  }
+
+  if (isInTightAlignment) {
+    scanArrowContainer.classList.add('locked');
+    scanArrowContainer.style.top = `calc(50% - 24.5px)`;
+    scanArrowContainer.style.transform = `rotate(0deg)`;
+  } else {
+    scanArrowContainer.classList.remove('locked');
+    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
   }
 
   if (isDangerCondition) {
@@ -606,7 +643,6 @@
     return;
   }
 
-  // MODIFICATION START: Corrected color reset logic
   if (warningMessageToShow) {
     clearTimeout(messageHideTimeout);
     messageHideTimeout = null;
@@ -621,7 +657,6 @@
       }, 500);
     }
   }
-  // MODIFICATION END
 
   if (nextHeadingIndex === 0 && degreesRotated > 180) {
     degreesRotated = 0;
@@ -761,6 +796,8 @@
   progressDisplay.innerHTML = '';
   hideInstructionMessage();
   videoOverlay.className = '';
+  scanStartMessage.style.display = 'none'; // MODIFICATION
+  scanStartMessage.classList.remove('fading-out'); // MODIFICATION
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
