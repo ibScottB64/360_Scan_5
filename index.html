@@ -29,8 +29,9 @@
  /* --- Instruction Screen Styles (from File 2) --- */
  #instructionScreen {
  justify-content: center; align-items: center; padding: 2rem;
- text-align: left; /* MODIFIED: Default align left */
- position: relative; /* MODIFIED: For close button */
+ text-align: center; /* MODIFIED: Center align title */
+ position: relative;
+ flex-direction: column; /* This ensures the content block and button are stacked vertically and centered */
  }
  /* MODIFICATION START: Styles for new close button and updated layout */
  .close-btn {
@@ -49,39 +50,39 @@
  width: 100%;
  }
  #instructionScreen h1 {
- font-size: 2.1rem;
+ font-size: 1.9rem; /* MODIFIED: Font size reduced */
  font-weight: 600;
  margin-bottom: 2.5rem;
  line-height: 1.2;
  }
  #instructionScreen ul {
  list-style: none; padding: 0; margin: 0; width: 100%;
- border-top: 1px solid #555;
+ /* MODIFIED: border-top removed */
  }
  #instructionScreen li {
  display: flex; align-items: center; text-align: left;
  font-size: 1rem;
- padding: 1.25rem 0;
- margin-bottom: 0; /* MODIFIED */
- border-bottom: 1px solid #555;
+ padding: 1rem 0; /* MODIFIED: Adjusted padding */
+ margin-bottom: 0;
+ /* MODIFIED: border-bottom removed */
  }
  #instructionScreen .icon {
- width: 28px; /* MODIFIED */
- height: 28px; /* MODIFIED */
+ width: 28px;
+ height: 28px;
  margin-right: 1.5rem; fill: #f0f0f0; flex-shrink: 0;
  }
  #startCaptureButton {
- position: relative; /* MODIFIED */
- bottom: auto; /* MODIFIED */
- left: auto; /* MODIFIED */
- transform: none; /* MODIFIED */
- width: 100%; /* MODIFIED */
+ position: relative;
+ bottom: auto;
+ left: auto;
+ transform: none;
+ width: 100%;
  max-width: 400px; padding: 1rem; font-size: 1.1rem;
  font-weight: 500; color: #f0f0f0; background-color: transparent;
- border: 1px solid #f0f0f0; /* MODIFIED */
- border-radius: 12px; /* MODIFIED */
+ border: 1px solid #f0f0f0;
+ border-radius: 12px;
  cursor: pointer;
- margin-top: 4rem; /* MODIFIED */
+ margin-top: 2.75rem; /* MODIFIED: Moved up (~20px) */
  }
  /* MODIFICATION END */
  #startCaptureButton:disabled { opacity: 0.5; cursor: not-allowed; }
