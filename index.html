@@ -36,8 +36,8 @@
  /* MODIFICATION START: Styles for new close button and updated layout */
  .close-btn {
  position: absolute;
- top: 1.5rem;
- left: 1.5rem;
+ top: 20px; /* MODIFIED */
+ left: 20px; /* MODIFIED */
  font-size: 2rem;
  color: #f0f0f0;
  cursor: pointer;
@@ -45,6 +45,22 @@
  line-height: 1;
  z-index: 10;
  }
+ /* MODIFICATION START: Sound toggle button styles */
+ .sound-toggle {
+ position: absolute;
+ top: 25px;
+ right: 25px;
+ font-size: 1.2rem;
+ color: #f0f0f0;
+ cursor: pointer;
+ font-family: sans-serif;
+ font-weight: normal;
+ z-index: 10;
+ }
+ .sound-toggle.on {
+ font-weight: bold;
+ }
+ /* MODIFICATION END */
  #instructionScreen .content {
  max-width: 400px;
  width: 100%;
@@ -178,6 +194,7 @@
 <div id="instructionScreen" class="screen">
  <!-- MODIFICATION START: Close button and content wrapper added -->
  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
+ <div id="soundToggle" class="sound-toggle">s</div>
  <div class="content">
   <h1>Testing space scan<br>instructions</h1>
   <ul>
@@ -253,6 +270,7 @@
  const permissionOverlay = document.getElementById('permission-overlay');
  const permissionBtn = document.getElementById('permission-button');
  const permissionError = document.getElementById('permission-error');
+ const soundToggle = document.getElementById('soundToggle'); // MODIFICATION: Added sound toggle reference
 
  // --- State and Configuration Variables ---
  let countdownStartTimer = null, isCountdownActive = false;
@@ -261,6 +279,7 @@
  let videoStream = null;
  let imageCaptureController = null;
  let isCapturing = false;
+ let isSoundEnabled = false; // MODIFICATION: Added sound state
 
  const COUNTDOWN_HOLD_TIME = 4000;
  const TARGET_PITCH = 80;
@@ -310,18 +329,38 @@
  const MAX_BEEP_INTERVAL = 2000;
  const MIN_BEEP_INTERVAL = 200;
 
+ // MODIFICATION START: Sound Toggle Function
+ function toggleSound() {
+ isSoundEnabled = !isSoundEnabled;
+ soundToggle.classList.toggle('on', isSoundEnabled);
+ // Initialize AudioContext on first user interaction enabling sound
+ if (isSoundEnabled && !audioContext) {
+  try {
+   audioContext = new (window.AudioContext || window.webkitAudioContext)();
+   console.log("AudioContext created and sound enabled.");
+  } catch (e) {
+   console.warn("Web Audio API is not supported. Sound cannot be enabled.");
+   isSoundEnabled = false; // Reset state if it fails
+   soundToggle.classList.remove('on');
+  }
+ }
+ }
+ // MODIFICATION END
+
  // --- Permission Handling & Audio Setup ---
  async function requestAllPermissions() {
+ console.log("Start button clicked, requesting permissions..."); // MODIFICATION: Added for debugging
  startCaptureButton.disabled = true;
  startCaptureButton.textContent = 'Requesting Access...';
 
- // Initialize AudioContext on user interaction
- if (!audioContext) {
-   try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-   } catch(e) {
-    console.warn("Web Audio API is not supported in this browser.");
-   }
+ // MODIFICATION: AudioContext is now created via the sound toggle button,
+ // but we can leave this check here as a fallback.
+ if (isSoundEnabled && !audioContext) {
+  try {
+   audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  } catch (e) {
+   console.warn("Web Audio API is not supported in this browser.");
+  }
  }
 
  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -666,14 +705,14 @@
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
-  startCaptureButton.textContent = 'Capture video';
+  startCaptureButton.textContent = 'Start testing space scan'; // MODIFICATION: Corrected button text
   arrowShape.style.stroke = 'black';
   arrowShape.style.fill = COLOR_BAD;
  }
 
  // Audio Functions
  function playBeep() {
-  if (!audioContext) return;
+  if (!audioContext || !isSoundEnabled) return; // MODIFICATION: Check if sound is enabled
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
 
@@ -714,6 +753,7 @@
  startCaptureButton.addEventListener('click', requestAllPermissions);
  permissionBtn.addEventListener('click', requestAllPermissions);
  instructionResetLink.addEventListener('click', resetAppToInstructions);
+ soundToggle.addEventListener('click', toggleSound); // MODIFICATION: Added sound toggle listener
 
  // Event listeners for review overlay (unchanged)
  reviewOverlay.addEventListener('touchstart', (e) => {
