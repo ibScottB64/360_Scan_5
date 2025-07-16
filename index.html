@@ -163,9 +163,15 @@
  }
  .scan-arrow {
  position: absolute; left: 10px;
- width: 58px; height: 43px; transition: top 0.1s linear, left 0.1s linear;
+ width: 58px; height: 43px;
+ transition: top 0.1s linear, left 0.1s linear, transform 0.1s linear; /* MODIFIED */
  z-index: 22;
  }
+ /* MODIFICATION START: Arrow locking style */
+ .scan-arrow.locked {
+  transition: left 0.1s linear; /* Only horizontal movement is smooth */
+ }
+ /* MODIFICATION END */
  #arrow-shape { transition: fill 0.2s linear; }
  .scan-line {
  position: absolute;
@@ -234,7 +240,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
   <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.8</div>
+  <div class="version-display">v 1.9</div>
   <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
@@ -339,7 +345,7 @@
  const PITCH_TOLERANCE_OK = 10;
  const PITCH_SCAN_TOLERANCE = 5;
  const ROLL_SCAN_TOLERANCE = 20;
- const ROLL_TOLERANCE_COUNTDOWN = ROLL_SCAN_TOLERANCE / 2; // MODIFICATION
+ const ROLL_TOLERANCE_COUNTDOWN = ROLL_SCAN_TOLERANCE / 2;
 
  // Velocity thresholds adjusted
  const VELOCITY_WARNING_THRESHOLD = 30; // deg/s
@@ -508,11 +514,27 @@
  const rotation = -smoothedRoll;
 
  const pitchOffset = beta - TARGET_PITCH;
+ const deviation = Math.abs(pitchOffset);
+ const rollDeviation = Math.abs(smoothedRoll);
+
+ // MODIFICATION START: Handle arrow locking and floating for both pre-scan and scanning
+ if (scanState === 'pre-scan' || scanState === 'scanning') {
+  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
+
+  if (isInTightAlignment) {
+   scanArrowContainer.classList.add('locked');
+   scanArrowContainer.style.top = 'calc(50% - 24.5px)'; // Uses final position for reference
+   scanArrowContainer.style.transform = 'rotate(0deg)';
+  } else {
+   scanArrowContainer.classList.remove('locked');
+   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+   scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
+  }
+ }
+ // MODIFICATION END
 
  if (scanState === 'pre-scan') {
-  const deviation = Math.abs(pitchOffset);
-  const rollDeviation = Math.abs(smoothedRoll);
-
   // Visual indicator (wider tolerance)
   if (deviation < PITCH_TOLERANCE_GOOD) {
     arrowShape.style.fill = COLOR_GOOD;
@@ -520,22 +542,8 @@
     arrowShape.style.fill = COLOR_OK;
   }
 
-  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
-
-  // MODIFICATION START: Arrow locking logic
-  if (isInTightAlignment) {
-    // Lock the arrow into the perfect position
-    scanArrowContainer.style.top = `calc(50% - 8.5px)`; // Centers on the line
-    scanArrowContainer.style.transform = `rotate(0deg)`;
-  } else {
-    // Use floating position
-    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
-  }
-  // MODIFICATION END
-
   // Countdown trigger (tighter tolerance with hold timer)
+  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
   if (isInTightAlignment) {
     if (alignmentHoldTimer === null && !isCountdownActive) {
       alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
@@ -584,7 +592,7 @@
   }
    
   if (!isDangerCondition && !warningMessageToShow) {
-    if (Math.abs(pitchOffset) > PITCH_SCAN_TOLERANCE || Math.abs(smoothedRoll) > ROLL_SCAN_TOLERANCE) {
+    if (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE) {
       warningMessageToShow = "Realign the arrow by rotating your phone to the left or right or forward or back.";
     }
   }
@@ -614,9 +622,6 @@
     }
   }
   // MODIFICATION END
-
-  const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-  scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
 
   if (nextHeadingIndex === 0 && degreesRotated > 180) {
     degreesRotated = 0;
