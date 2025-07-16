@@ -193,7 +193,7 @@
  </style>
 </head>
 <body>
-<div class="version-display">v 1.1</div>
+<div class="version-display">v 1.2</div>
 
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
@@ -296,7 +296,7 @@
  const PITCH_SCAN_TOLERANCE = 5;
  const ROLL_SCAN_TOLERANCE = 20;
 
- // MODIFICATION: Velocity thresholds adjusted
+ // Velocity thresholds adjusted
  const VELOCITY_WARNING_THRESHOLD = 30; // deg/s
  const VELOCITY_DANGER_THRESHOLD = 60; // deg/s
 
@@ -340,7 +340,8 @@
  // MODIFICATION END
 
  // --- Permission Handling & Audio Setup ---
- // THIS FUNCTION IS FROM THE ORIGINAL FILE AND HAS NOT BEEN CHANGED TO PRESERVE FUNCTIONALITY
+ // MODIFICATION: Added enhanced, user-facing error messages for diagnostics.
+ // The core logic is unchanged from the original file.
  async function requestAllPermissions() {
  startCaptureButton.disabled = true;
  startCaptureButton.textContent = 'Requesting Access...';
@@ -360,13 +361,13 @@
   if (permissionState === 'granted') {
   await initializeApp();
   } else {
-  permissionError.textContent = "Sensor permission denied.";
+  permissionError.textContent = "Sensor permission was denied. Please allow sensor access to continue.";
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
   }
  } catch (error) {
   console.error("Sensor permission error:", error);
-  permissionError.textContent = "Could not get sensor permissions.";
+  permissionError.textContent = `Could not get sensor permissions. Error: ${error.message}`;
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
  }
@@ -398,7 +399,7 @@
   appContainer.classList.remove('hidden');
  } catch (err) {
   console.error("Camera error:", err);
-  permissionError.textContent = "Camera access denied. Please check settings.";
+  permissionError.textContent = `Camera access was denied or failed. Please check settings. Error: ${err.message}`;
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
  }
@@ -461,13 +462,13 @@
  currentHeading = alpha;
  smoothedRoll = (smoothedRoll * (1 - SMOOTHING_FACTOR)) + (gamma * SMOOTHING_FACTOR);
  const rotation = -smoothedRoll;
- scanArrowContainer.style.transform = `rotate($deg)`;
+ scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
 
  const pitchOffset = beta - TARGET_PITCH;
 
  if (scanState === 'pre-scan') {
   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-  scanArrowContainer.style.top = `calc(${ - ${A)`;
+  scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
   scanArrowContainer.style.left = '10px';
 
   const deviation = Math.abs(pitchOffset);
@@ -560,13 +561,15 @@
   }
 
   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-  scanArrowContainer.style.top = `calc(${to ${ARR;
+  scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
 
   if (nextHeadingIndex === 0 && degreesRotated > 180) {
     degreesRotated = 0;
   }
   const arrowLeftPercent = 10 + (degreesRotated / 360) * 80;
-  scanArrowContainer.style.left = `${arro  if (isCapturing || nextHeadingIndex >= targetHeadings.length) return;
+  scanArrowContainer.style.left = `${arrowLeftPercent}%`;
+
+  if (isCapturing || nextHeadingIndex >= targetHeadings.length) return;
 
   const target = targetHeadings[nextHeadingIndex];
   let diff = target - currentHeading;
@@ -625,7 +628,8 @@
  function updateProgressDisplay(dataUrl, index) {
  const frameDiv = document.createElement('div');
  frameDiv.className = 'progress-frame';
- frameDiv.style.backgroundImage = `url(${dataUrameDiv.addEventListener('click', () => showReviewImage(index));
+ frameDiv.style.backgroundImage = `url(${dataUrl})`;
+ frameDiv.addEventListener('click', () => showReviewImage(index));
  progressDisplay.appendChild(frameDiv);
  }
 
@@ -775,13 +779,13 @@
  
  async function submitAction() {
  if (capturedFrames.length === 0) { return; }
- appStatus.textContent = ""; // MODIFICATION: Removed status text
+ appStatus.textContent = "";
  try {
   const zip = new JSZip();
   capturedFrames.forEach((dataUrl, index) => {
   const paddedIndex = String(index + 1).padStart(2, '0');
   const base64Data = dataUrl.substring(dataUrl.indexOf(',') + 1);
-  zip.file(`image_${padded base64Data, { base64: true });
+  zip.file(`image_${paddedIndex}.jpeg`, base64Data, { base64: true });
   });
   const zipBlob = await zip.generateAsync({ type: "blob", compression: "DEFLATE" });
   const downloadLink = document.createElement('a');
@@ -792,10 +796,10 @@
   downloadLink.click();
   document.body.removeChild(downloadLink);
   URL.revokeObjectURL(url);
-  appStatus.textContent = ""; // MODIFICATION: Removed status text
+  appStatus.textContent = "";
  } catch(err) {
   console.error("Error creating zip file:", err);
-  appStatus.textContent = ""; // MODIFICATION: Removed status text
+  appStatus.textContent = "";
  }
  }
 
@@ -810,3 +814,5 @@
  </script>
 </body>
 </html>
+
+
