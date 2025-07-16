@@ -46,8 +46,9 @@
  }
  .close-btn {
  position: absolute;
- top: 1rem;
- left: 1rem;
+ top: 5px; /* MODIFIED */
+ left: 5px; /* MODIFIED */
+ padding: 0.5rem; /* Adds touch area without moving the icon */
  font-size: 2rem;
  color: #f0f0f0;
  cursor: pointer;
@@ -57,16 +58,18 @@
  }
  .sound-toggle {
  position: absolute;
- top: 1.2rem;
- right: 1.2rem;
+ top: 5px; /* MODIFIED */
+ right: 5px; /* MODIFIED */
+ padding: 0.5rem; /* Adds touch area without moving the icon */
  font-size: 1.2rem;
- color: #f0f0f0;
+ color: rgba(255, 255, 255, 0.4); /* MODIFIED: Initial color changed */
  cursor: pointer;
  font-family: sans-serif;
  font-weight: normal;
  z-index: 10;
  }
  .sound-toggle.on {
+ color: #f0f0f0; /* MODIFIED: Active color added */
  font-weight: bold;
  }
  #instructionScreen .content {
@@ -193,7 +196,7 @@
  </style>
 </head>
 <body>
-<div class="version-display">v 1.2</div>
+<div class="version-display">v 1.3</div>
 
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
@@ -296,7 +299,7 @@
  const PITCH_SCAN_TOLERANCE = 5;
  const ROLL_SCAN_TOLERANCE = 20;
 
- // Velocity thresholds adjusted
+ // MODIFICATION: Velocity thresholds adjusted
  const VELOCITY_WARNING_THRESHOLD = 30; // deg/s
  const VELOCITY_DANGER_THRESHOLD = 60; // deg/s
 
@@ -340,8 +343,7 @@
  // MODIFICATION END
 
  // --- Permission Handling & Audio Setup ---
- // MODIFICATION: Added enhanced, user-facing error messages for diagnostics.
- // The core logic is unchanged from the original file.
+ // THIS FUNCTION IS FROM THE ORIGINAL FILE AND HAS NOT BEEN CHANGED.
  async function requestAllPermissions() {
  startCaptureButton.disabled = true;
  startCaptureButton.textContent = 'Requesting Access...';
@@ -361,13 +363,13 @@
   if (permissionState === 'granted') {
   await initializeApp();
   } else {
-  permissionError.textContent = "Sensor permission was denied. Please allow sensor access to continue.";
+  permissionError.textContent = "Sensor permission denied.";
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
   }
  } catch (error) {
   console.error("Sensor permission error:", error);
-  permissionError.textContent = `Could not get sensor permissions. Error: ${error.message}`;
+  permissionError.textContent = "Could not get sensor permissions.";
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
  }
@@ -399,7 +401,7 @@
   appContainer.classList.remove('hidden');
  } catch (err) {
   console.error("Camera error:", err);
-  permissionError.textContent = `Camera access was denied or failed. Please check settings. Error: ${err.message}`;
+  permissionError.textContent = "Camera access denied. Please check settings.";
   permissionOverlay.classList.remove('hidden');
   instructionScreen.classList.add('hidden');
  }
@@ -814,5 +816,3 @@
  </script>
 </body>
 </html>
-
-
