@@ -142,7 +142,6 @@
  #video-feed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
  /* --- Overlays for Video (from File 2) --- */
- /* MODIFICATION START: Video overlay styles added */
  #video-overlay {
   position: absolute;
   top: 0;
@@ -157,7 +156,6 @@
  #video-overlay.overlay-yellow { background-color: rgba(241, 196, 15, 0.15); }
  #video-overlay.overlay-green { background-color: rgba(163, 230, 53, 0.15); }
  #video-overlay.overlay-red { background-color: rgba(231, 76, 60, 0.2); }
- /* MODIFICATION END */
 
  .scan-overlay {
  position: absolute; top: 2%; left: 5%; right: 5%; bottom: 2%;
@@ -262,7 +260,7 @@
  <div class="camera-view-container" id="camera-view-container">
   <div class="camera-view" id="camera-view">
   <video id="video-feed" autoplay playsinline muted></video>
-  <div id="video-overlay"></div><!-- MODIFICATION: New overlay element -->
+  <div id="video-overlay"></div>
   <div class="scan-overlay"></div>
   <div id="scanArrowContainer" class="scan-arrow">
    <svg viewBox="0 0 23 30">
@@ -301,7 +299,7 @@
  const appContainer = document.querySelector('.app-container');
  const cameraViewContainer = document.getElementById('camera-view-container');
  const videoElement = document.getElementById('video-feed');
- const videoOverlay = document.getElementById('video-overlay'); // MODIFICATION
+ const videoOverlay = document.getElementById('video-overlay');
  const scanArrowContainer = document.getElementById('scanArrowContainer');
  const arrowShape = document.getElementById('arrow-shape');
  const scanLine = document.getElementById('scanLine');
@@ -327,7 +325,7 @@
  let imageCaptureController = null;
  let isCapturing = false;
  let isSoundEnabled = false;
- let alignmentHoldTimer = null; // MODIFICATION
+ let alignmentHoldTimer = null;
 
  const TARGET_PITCH = 80;
  const DEGREES_PER_FRAME = 60;
@@ -336,11 +334,12 @@
 
  // Alignment tolerances
  const PITCH_TOLERANCE_GOOD = 5;
- const PITCH_TOLERANCE_COUNTDOWN = PITCH_TOLERANCE_GOOD / 2; // MODIFICATION
- const ALIGNMENT_HOLD_TIME = 500; // MODIFICATION
+ const PITCH_TOLERANCE_COUNTDOWN = PITCH_TOLERANCE_GOOD / 2;
+ const ALIGNMENT_HOLD_TIME = 500;
  const PITCH_TOLERANCE_OK = 10;
  const PITCH_SCAN_TOLERANCE = 5;
  const ROLL_SCAN_TOLERANCE = 20;
+ const ROLL_TOLERANCE_COUNTDOWN = ROLL_SCAN_TOLERANCE / 2; // MODIFICATION
 
  // Velocity thresholds adjusted
  const VELOCITY_WARNING_THRESHOLD = 30; // deg/s
@@ -439,7 +438,7 @@
   instructionScreen.classList.add('hidden');
   appContainer.classList.remove('hidden');
   showInstructionMessage("Align the arrow with the red line to begin countdown.");
-  videoOverlay.className = 'overlay-yellow'; // MODIFICATION
+  videoOverlay.className = 'overlay-yellow';
  } catch (err) {
   console.error("Camera error:", err);
   permissionError.textContent = "Camera access denied. Please check settings.";
@@ -452,9 +451,9 @@
 
  // --- Countdown and Scan Start Logic ---
  function startCountdownSequence() {
- if (isCountdownActive) return; // Prevent multiple triggers
+ if (isCountdownActive) return;
  isCountdownActive = true;
- alignmentHoldTimer = null; // Clear timer once it has succeeded
+ alignmentHoldTimer = null;
  hideInstructionMessage();
  countdownDisplay.style.display = 'block';
 
@@ -477,7 +476,7 @@
  }
 
  async function beginCaptureProcess() {
- videoOverlay.className = ''; // MODIFICATION
+ videoOverlay.className = '';
  scanState = 'scanning';
  startHeading = currentHeading;
  targetHeadings = [];
@@ -507,17 +506,13 @@
  currentHeading = alpha;
  smoothedRoll = (smoothedRoll * (1 - SMOOTHING_FACTOR)) + (gamma * SMOOTHING_FACTOR);
  const rotation = -smoothedRoll;
- scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
 
  const pitchOffset = beta - TARGET_PITCH;
 
  if (scanState === 'pre-scan') {
-  const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-  scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-  scanArrowContainer.style.left = '10px';
-
   const deviation = Math.abs(pitchOffset);
-  
+  const rollDeviation = Math.abs(smoothedRoll);
+
   // Visual indicator (wider tolerance)
   if (deviation < PITCH_TOLERANCE_GOOD) {
     arrowShape.style.fill = COLOR_GOOD;
@@ -525,8 +520,23 @@
     arrowShape.style.fill = COLOR_OK;
   }
 
+  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
+
+  // MODIFICATION START: Arrow locking logic
+  if (isInTightAlignment) {
+    // Lock the arrow into the perfect position
+    scanArrowContainer.style.top = `calc(50% - 8.5px)`; // Centers on the line
+    scanArrowContainer.style.transform = `rotate(0deg)`;
+  } else {
+    // Use floating position
+    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
+  }
+  // MODIFICATION END
+
   // Countdown trigger (tighter tolerance with hold timer)
-  if (deviation < PITCH_TOLERANCE_COUNTDOWN) {
+  if (isInTightAlignment) {
     if (alignmentHoldTimer === null && !isCountdownActive) {
       alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
     }
@@ -581,31 +591,29 @@
 
   if (isDangerCondition) {
     scanState = 'error';
-    videoOverlay.className = 'overlay-red'; // MODIFICATION
+    videoOverlay.className = 'overlay-red';
     arrowShape.style.fill = COLOR_BAD;
     showInstructionMessage("You rotated the camera too quickly, but you're doing great!", true);
     clearTimeout(messageHideTimeout);
     return;
   }
 
+  // MODIFICATION START: Corrected color reset logic
   if (warningMessageToShow) {
     clearTimeout(messageHideTimeout);
     messageHideTimeout = null;
     showInstructionMessage(warningMessageToShow);
     arrowShape.style.fill = COLOR_OK;
   } else {
+    arrowShape.style.fill = COLOR_GOOD;
     if (instructionMessageBox.style.display === 'block' && !messageHideTimeout) {
       messageHideTimeout = setTimeout(() => {
         hideInstructionMessage();
-        arrowShape.style.fill = COLOR_GOOD;
+        messageHideTimeout = null;
       }, 500);
     }
-    if (!messageHideTimeout) {
-      arrowShape.style.fill = COLOR_GOOD;
-    } else {
-       arrowShape.style.fill = COLOR_OK;
-    }
   }
+  // MODIFICATION END
 
   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
@@ -631,7 +639,7 @@
    if (capturedFrames.length >= TOTAL_FRAMES) {
     scanState = 'complete';
     hideInstructionMessage();
-    videoOverlay.className = 'overlay-green'; // MODIFICATION
+    videoOverlay.className = 'overlay-green';
     clearTimeout(beepTimeoutId);
     scanArrowContainer.style.left = 'calc(95% - 68px)';
     scanArrowContainer.style.top = 'calc(50% - 24.5px)';
@@ -747,7 +755,7 @@
    
   progressDisplay.innerHTML = '';
   hideInstructionMessage();
-  videoOverlay.className = ''; // MODIFICATION
+  videoOverlay.className = '';
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
