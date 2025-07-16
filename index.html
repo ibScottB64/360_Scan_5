@@ -29,15 +29,15 @@
  /* --- Instruction Screen Styles (from File 2) --- */
  #instructionScreen {
  justify-content: center; align-items: center; padding: 2rem;
- text-align: center; /* MODIFIED: Center align title */
+ text-align: center;
  position: relative;
- flex-direction: column; /* This ensures the content block and button are stacked vertically and centered */
+ flex-direction: column;
  }
  /* MODIFICATION START: Styles for new close button and updated layout */
  .close-btn {
  position: absolute;
- top: 20px; /* MODIFIED */
- left: 20px; /* MODIFIED */
+ top: 1rem; /* MODIFIED */
+ left: 1rem; /* MODIFIED */
  font-size: 2rem;
  color: #f0f0f0;
  cursor: pointer;
@@ -48,8 +48,8 @@
  /* MODIFICATION START: Sound toggle button styles */
  .sound-toggle {
  position: absolute;
- top: 25px;
- right: 25px;
+ top: 1.2rem; /* MODIFIED */
+ right: 1.2rem; /* MODIFIED */
  font-size: 1.2rem;
  color: #f0f0f0;
  cursor: pointer;
@@ -66,21 +66,19 @@
  width: 100%;
  }
  #instructionScreen h1 {
- font-size: 1.9rem; /* MODIFIED: Font size reduced */
+ font-size: 1.9rem;
  font-weight: 600;
  margin-bottom: 2.5rem;
  line-height: 1.2;
  }
  #instructionScreen ul {
  list-style: none; padding: 0; margin: 0; width: 100%;
- /* MODIFIED: border-top removed */
  }
  #instructionScreen li {
  display: flex; align-items: center; text-align: left;
  font-size: 1rem;
- padding: 1rem 0; /* MODIFIED: Adjusted padding */
+ padding: 1rem 0;
  margin-bottom: 0;
- /* MODIFIED: border-bottom removed */
  }
  #instructionScreen .icon {
  width: 28px;
@@ -98,9 +96,8 @@
  border: 1px solid #f0f0f0;
  border-radius: 12px;
  cursor: pointer;
- margin-top: 2.75rem; /* MODIFIED: Moved up (~20px) */
+ margin-top: 2.75rem;
  }
- /* MODIFICATION END */
  #startCaptureButton:disabled { opacity: 0.5; cursor: not-allowed; }
 
 
@@ -192,7 +189,6 @@
 
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
- <!-- MODIFICATION START: Close button and content wrapper added -->
  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
  <div id="soundToggle" class="sound-toggle">s</div>
  <div class="content">
@@ -206,7 +202,6 @@
   </ul>
  </div>
  <button id="startCaptureButton">Start testing space scan</button>
- <!-- MODIFICATION END -->
 </div>
 
 <!-- =========== MAIN APP (File 1 structure with File 2 visuals) =========== -->
@@ -270,7 +265,7 @@
  const permissionOverlay = document.getElementById('permission-overlay');
  const permissionBtn = document.getElementById('permission-button');
  const permissionError = document.getElementById('permission-error');
- const soundToggle = document.getElementById('soundToggle'); // MODIFICATION: Added sound toggle reference
+ const soundToggle = document.getElementById('soundToggle');
 
  // --- State and Configuration Variables ---
  let countdownStartTimer = null, isCountdownActive = false;
@@ -279,7 +274,7 @@
  let videoStream = null;
  let imageCaptureController = null;
  let isCapturing = false;
- let isSoundEnabled = false; // MODIFICATION: Added sound state
+ let isSoundEnabled = false;
 
  const COUNTDOWN_HOLD_TIME = 4000;
  const TARGET_PITCH = 80;
@@ -333,32 +328,20 @@
  function toggleSound() {
  isSoundEnabled = !isSoundEnabled;
  soundToggle.classList.toggle('on', isSoundEnabled);
- // Initialize AudioContext on first user interaction enabling sound
- if (isSoundEnabled && !audioContext) {
-  try {
-   audioContext = new (window.AudioContext || window.webkitAudioContext)();
-   console.log("AudioContext created and sound enabled.");
-  } catch (e) {
-   console.warn("Web Audio API is not supported. Sound cannot be enabled.");
-   isSoundEnabled = false; // Reset state if it fails
-   soundToggle.classList.remove('on');
-  }
- }
  }
  // MODIFICATION END
 
  // --- Permission Handling & Audio Setup ---
+ // MODIFICATION: Reverted this function to its original state to fix button functionality.
  async function requestAllPermissions() {
- console.log("Start button clicked, requesting permissions..."); // MODIFICATION: Added for debugging
  startCaptureButton.disabled = true;
  startCaptureButton.textContent = 'Requesting Access...';
 
- // MODIFICATION: AudioContext is now created via the sound toggle button,
- // but we can leave this check here as a fallback.
- if (isSoundEnabled && !audioContext) {
+ // Initialize AudioContext on user interaction
+ if (!audioContext) {
   try {
    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  } catch (e) {
+  } catch(e) {
    console.warn("Web Audio API is not supported in this browser.");
   }
  }
@@ -705,7 +688,7 @@
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
-  startCaptureButton.textContent = 'Start testing space scan'; // MODIFICATION: Corrected button text
+  startCaptureButton.textContent = 'Start testing space scan';
   arrowShape.style.stroke = 'black';
   arrowShape.style.fill = COLOR_BAD;
  }
@@ -753,7 +736,7 @@
  startCaptureButton.addEventListener('click', requestAllPermissions);
  permissionBtn.addEventListener('click', requestAllPermissions);
  instructionResetLink.addEventListener('click', resetAppToInstructions);
- soundToggle.addEventListener('click', toggleSound); // MODIFICATION: Added sound toggle listener
+ soundToggle.addEventListener('click', toggleSound);
 
  // Event listeners for review overlay (unchanged)
  reviewOverlay.addEventListener('touchstart', (e) => {
