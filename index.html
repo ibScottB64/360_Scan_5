@@ -173,11 +173,11 @@
  #arrow-shape { transition: fill 0.2s linear; }
  #completion-check {
   position: absolute;
-  width: 28px; /* MODIFIED */
-  height: 28px; /* MODIFIED */
+  width: 28px;
+  height: 28px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, calc(-50% + 10px)); /* MODIFIED */
+  transform: translate(-50%, calc(-50% + 10px));
   z-index: 1;
  }
  .scan-line {
@@ -202,7 +202,14 @@
  text-align: center;
  font-size: 1.1rem;
  line-height: 1.4; z-index: 20;
+ opacity: 1;
+ transition: opacity 2s ease-out; /* MODIFICATION: Added for fade out */
  }
+ /* MODIFICATION START: New class for message box fade-out */
+ #instructionMessageBox.fading-out {
+  opacity: 0;
+ }
+ /* MODIFICATION END */
  #instructionResetLink {
   display: block;
   margin-top: 0.75rem;
@@ -217,10 +224,12 @@
  transform: translate(-50%, -50%); font-size: 20rem; font-weight: 700;
  color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); z-index: 25;
  }
- @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+ /* MODIFICATION START: Updated animation for start message */
+ @keyframes startMessageFade {
+  0%, 25% { opacity: 1; } /* Stay solid for 1s of 4s total */
+  100% { opacity: 0; }   /* Fade out over the next 3s */
  }
+ /* MODIFICATION END */
  #scanStartMessage {
   display: none;
   position: absolute;
@@ -236,7 +245,7 @@
   pointer-events: none;
  }
  #scanStartMessage.fading-out {
-  animation: fadeOut 2s ease-out forwards;
+  animation: startMessageFade 4s ease-out forwards; /* MODIFIED */
  }
  .control-panel { display: none; } /* Hidden for now */
  .progress-display { display: flex; align-items: center; gap: 0; padding: 12px; overflow-x: auto; min-height: 52px; box-sizing: border-box;}
@@ -300,11 +309,9 @@
    <svg viewBox="0 0 23 30">
     <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
    </svg>
-    <!-- MODIFICATION START: Checkmark SVG updated for new style -->
     <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
-        <path d="M2,14 L9,21 L22,3 L21,4 L9,18 L4,13 Z" fill="white"/>
+        <path d="M2.9,13.3c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l4,4L19.7,4.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4L9.8,19.1 C9.6,19.3,9.3,19.4,9,19.4s-0.6-0.1-0.8-0.4L2.9,13.3z" fill="white"/>
     </svg>
-    <!-- MODIFICATION END -->
   </div>
   <div id="scanLine" class="scan-line"></div>
   <div id="instructionMessageBox">
@@ -526,7 +533,7 @@
  setTimeout(() => {
   scanStartMessage.style.display = 'none';
   scanStartMessage.classList.remove('fading-out');
- }, 2000);
+ }, 4000); // MODIFICATION
 
  startHeading = currentHeading;
  targetHeadings = [];
@@ -645,10 +652,13 @@
   } else {
     arrowShape.style.fill = COLOR_GOOD;
     if (instructionMessageBox.style.display === 'block' && !messageHideTimeout) {
+     // MODIFICATION START: Logic for graceful fade-out of warning message
+      instructionMessageBox.classList.add('fading-out');
       messageHideTimeout = setTimeout(() => {
         hideInstructionMessage();
         messageHideTimeout = null;
-      }, 500);
+      }, 2000);
+     // MODIFICATION END
     }
   }
 
@@ -759,6 +769,8 @@
 
  // Popup and Reset Functions
  function showInstructionMessage(message, showReset = false) {
+  instructionMessageBox.classList.remove('fading-out'); // MODIFICATION
+  instructionMessageBox.style.opacity = 1; // MODIFICATION
   instructionMessageText.textContent = message;
   instructionResetLink.classList.toggle('hidden', !showReset);
   instructionMessageBox.style.display = 'block';
@@ -766,6 +778,8 @@
 
  function hideInstructionMessage() {
   instructionMessageBox.style.display = 'none';
+  instructionMessageBox.classList.remove('fading-out'); // MODIFICATION
+  instructionMessageBox.style.opacity = 1; // MODIFICATION
  }
 
  function resetAppToInstructions() {
