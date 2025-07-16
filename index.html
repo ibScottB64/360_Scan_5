@@ -27,20 +27,20 @@
  .hidden { display: none !important; }
 
  #top-bar-controls {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 5px;
-  box-sizing: border-box;
-  z-index: 15;
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 5px 5px;
+ box-sizing: border-box;
+ z-index: 15;
  }
  .version-display {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.4);
+ font-size: 0.7rem;
+ color: rgba(255, 255, 255, 0.4);
  }
 
  /* --- Instruction Screen Styles (from File 2) --- */
@@ -50,20 +50,20 @@
  position: relative;
  }
  .close-btn {
-  font-size: 2rem;
-  color: #f0f0f0;
-  cursor: pointer;
-  font-family: sans-serif;
-  line-height: 1;
-  z-index: 10;
+ font-size: 2rem;
+ color: #f0f0f0;
+ cursor: pointer;
+ font-family: sans-serif;
+ line-height: 1;
+ z-index: 10;
  }
  .sound-toggle {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-  font-family: sans-serif;
-  font-weight: normal;
-  z-index: 10;
+ font-size: 0.7rem;
+ color: rgba(255, 255, 255, 0.4);
+ cursor: pointer;
+ font-family: sans-serif;
+ font-weight: normal;
+ z-index: 10;
  }
  .sound-toggle.on {
  color: #f0f0f0;
@@ -115,20 +115,20 @@
  background-color: #000; box-shadow: 0 0 20px rgba(0,0,0,0.1);
  }
  .app-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #1a1a1a;
-  border-bottom: 1px solid #333;
-  color: #f0f0f0;
-  font-weight: 500;
-  font-size: 1.1rem;
+ display: flex;
+ align-items: center;
+ padding: 12px 16px;
+ background-color: #1a1a1a;
+ border-bottom: 1px solid #333;
+ color: #f0f0f0;
+ font-weight: 500;
+ font-size: 1.1rem;
  }
  .app-header .header-icon {
-  width: 24px;
-  height: 24px;
-  fill: #f0f0f0;
-  margin-right: 12px;
+ width: 24px;
+ height: 24px;
+ fill: #f0f0f0;
+ margin-right: 12px;
  }
  .main-content { display: flex; min-height: 0; }
  .camera-view-container {
@@ -143,15 +143,15 @@
 
  /* --- Overlays for Video (from File 2) --- */
  #video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-  z-index: 5;
-  pointer-events: none;
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-color: transparent;
+ transition: background-color 0.3s ease;
+ z-index: 5;
+ pointer-events: none;
  }
  #video-overlay.overlay-yellow { background-color: rgba(241, 196, 15, 0.15); }
  #video-overlay.overlay-green { background-color: rgba(163, 230, 53, 0.15); }
@@ -168,17 +168,17 @@
  z-index: 22;
  }
  .scan-arrow.locked {
-  transition: left 0.1s linear;
+ transition: left 0.1s linear;
  }
  #arrow-shape { transition: fill 0.2s linear; }
  #completion-check {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, calc(-50% + 12px)); /* MODIFIED */
-  z-index: 1;
+ position: absolute;
+ width: 28px;
+ height: 28px;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, calc(-50% + 12px)); /* MODIFIED */
+ z-index: 1;
  }
  .scan-line {
  position: absolute;
@@ -206,16 +206,16 @@
  transition: opacity 2s ease-out; /* MODIFICATION: Added for fade out */
  }
  #instructionMessageBox.fading-out {
-  opacity: 0;
+ opacity: 0;
  }
  #instructionResetLink {
-  display: block;
-  margin-top: 0.75rem;
-  color: #007BFF;
-  text-decoration: underline;
-  font-weight: 500;
-  cursor: pointer;
-   font-size: 0.9rem;
+ display: block;
+ margin-top: 0.75rem;
+ color: #007BFF;
+ text-decoration: underline;
+ font-weight: 500;
+ cursor: pointer;
+  font-size: 0.9rem;
  }
  #countdownDisplay {
  display: none; position: absolute; top: 50%; left: 50%;
@@ -223,25 +223,25 @@
  color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); z-index: 25;
  }
  @keyframes startMessageFade {
-  0%, 25% { opacity: 1; }
-  100% { opacity: 0; }
+ 0%, 25% { opacity: 1; }
+ 100% { opacity: 0; }
  }
  #scanStartMessage {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-  z-index: 25;
-  text-align: center;
-  pointer-events: none;
+ display: none;
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ font-size: 3rem;
+ font-weight: 700;
+ color: white;
+ text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+ z-index: 25;
+ text-align: center;
+ pointer-events: none;
  }
  #scanStartMessage.fading-out {
-  animation: startMessageFade 4s ease-out forwards;
+ animation: startMessageFade 4s ease-out forwards;
  }
  .control-panel { display: none; } /* Hidden for now */
  .progress-display { display: flex; align-items: center; gap: 0; padding: 12px; overflow-x: auto; min-height: 52px; box-sizing: border-box;}
@@ -272,18 +272,18 @@
 <!-- =========== INSTRUCTION SCREEN (from File 2) =========== -->
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
-  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.13</div>
-  <div id="soundToggle" class="sound-toggle">s</div>
+ <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
+ <div class="version-display">v 1.14</div>
+ <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
  <h1>Testing space scan<br>instructions</h1>
  <ul>
-  <li><svg class="icon" viewBox="0 0 24 24"><path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2A1,1 0 0,1 13,3V4A1,1 0 0,1 12,5A1,1 0 0,1 11,4V3A1,1 0 0,1 12,2M19.07,4.93A1,1 0 0,1 20.5,6.34L19.79,7.05A1,1 0 0,1 18.38,5.64L19.07,4.93M4.93,19.07A1,1 0 0,1 6.34,20.5L7.05,19.79A1,1 0 0,1 5.64,18.38L4.93,19.07M18.38,18.38A1,1 0 0,1 19.79,19.79L20.5,19.07A1,1 0 0,1 19.07,17.66L18.38,18.38M22,12A1,1 0 0,1 21,13H20A1,1 0 0,1 19,12A1,1 0 0,1 20,11H21A1,1 0 0,1 22,12M4,12A1,1 0 0,1 3,13H2A1,1 0 0,1 1,12A1,1 0 0,1 2,11H3A1,1 0 0,1 4,12M12,19A1,1 0 0,1 11,20V21A1,1 0 0,1 12,22A1,1 0 0,1 13,21V20A1,1 0 0,1 12,19Z"/></svg><span>Ensure testing space is well-lit</span></li>
-  <li><svg class="icon" viewBox="0 0 24 24"><path d="M2 12h20v2H2zm2-4h2v2H4zm14 0h2v2h-2zM2 6h20v2H2zm18 8H4v6h2v-2h12v2h2z"/></svg><span>Stand in the middle of your testing space facing your desk.</span></li>
-  <li><svg class="icon" viewBox="0 0 24 24"><path d="M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z"/></svg><span>Hold your mobile phone in portrait mode and as level as possible and aligning the arrow with the line.</span></li>
-  <li><svg class="icon" viewBox="0 0 24 24"><path d="M12,4C14.1,4 16.1,4.8 17.6,6.3C20.7,9.4 20.7,14.5 17.6,17.6C14.5,20.7 9.4,20.7 6.3,17.6C5.1,16.5 4.3,15.1 4,13.5H6.1C6.4,14.6 7.1,15.6 7.9,16.4C10.3,18.8 14.3,18.8 16.7,16.4C19.1,14 19.1,10 16.7,7.6C15.6,6.5 14,6 12.3,6L13.1,6.8L11.7,8.2L8.2,4.7L11.7,1.2L13.1,2.6L12,3.8C12,3.8 12,3.9 12,4M12,19.9C11.7,19.9 11.4,20 11.1,20C6.6,20 3,16.4 3,11.9C3,11.6 3,11.3 3,11H1C1,11.3 1,11.6 1,11.9C1,17.5 5.5,22 11.1,22C11.4,22 11.7,22 12,21.9V19.9Z"/></svg><span>When prompted start rotating to your right 360&deg;</span></li>
-  <li><svg class="icon" viewBox="0 0 24 24"><path d="M12.2,19.9C14.6,19.9 16.6,17.9 16.6,15.5C16.6,13.1 14.6,11.1 12.2,11.1C11.2,11.1 9.9,11.9 9.9,11.9C9.9,11.9 9.3,11.4 8.2,11.1C6.2,10.5 4.1,11.9 3.5,13.9C2.8,15.9 4.2,18 6.2,18.7C6.6,18.8 7.1,18.9 7.6,18.9C8.6,18.9 9.6,18.5 10.3,17.7C10.3,17.7 10.6,18.9 12.2,19.9M18,12.5C19.4,12.5 20.5,11.4 20.5,10C20.5,8.6 19.4,7.5 18,7.5C16.6,7.5 15.5,8.6 15.5,10C15.5,11.4 16.6,12.5 18,12.5M19.5,6.5C20.6,6.5 21.5,5.6 21.5,4.5C21.5,3.4 20.6,2.5 19.5,2.5C18.4,2.5 17.5,3.4 17.5,4.5C17.5,5.6 18.4,6.5 19.5,6.5Z"/></svg><span>Move slowly to ensure proper capturing of your environment.</span></li>
+ <li><svg class="icon" viewBox="0 0 24 24"><path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2A1,1 0 0,1 13,3V4A1,1 0 0,1 12,5A1,1 0 0,1 11,4V3A1,1 0 0,1 12,2M19.07,4.93A1,1 0 0,1 20.5,6.34L19.79,7.05A1,1 0 0,1 18.38,5.64L19.07,4.93M4.93,19.07A1,1 0 0,1 6.34,20.5L7.05,19.79A1,1 0 0,1 5.64,18.38L4.93,19.07M18.38,18.38A1,1 0 0,1 19.79,19.79L20.5,19.07A1,1 0 0,1 19.07,17.66L18.38,18.38M22,12A1,1 0 0,1 21,13H20A1,1 0 0,1 19,12A1,1 0 0,1 20,11H21A1,1 0 0,1 22,12M4,12A1,1 0 0,1 3,13H2A1,1 0 0,1 1,12A1,1 0 0,1 2,11H3A1,1 0 0,1 4,12M12,19A1,1 0 0,1 11,20V21A1,1 0 0,1 12,22A1,1 0 0,1 13,21V20A1,1 0 0,1 12,19Z"/></svg><span>Ensure testing space is well-lit</span></li>
+ <li><svg class="icon" viewBox="0 0 24 24"><path d="M2 12h20v2H2zm2-4h2v2H4zm14 0h2v2h-2zM2 6h20v2H2zm18 8H4v6h2v-2h12v2h2z"/></svg><span>Stand in the middle of your testing space facing your desk.</span></li>
+ <li><svg class="icon" viewBox="0 0 24 24"><path d="M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z"/></svg><span>Hold your mobile phone in portrait mode and as level as possible and aligning the arrow with the line.</span></li>
+ <li><svg class="icon" viewBox="0 0 24 24"><path d="M12,4C14.1,4 16.1,4.8 17.6,6.3C20.7,9.4 20.7,14.5 17.6,17.6C14.5,20.7 9.4,20.7 6.3,17.6C5.1,16.5 4.3,15.1 4,13.5H6.1C6.4,14.6 7.1,15.6 7.9,16.4C10.3,18.8 14.3,18.8 16.7,16.4C19.1,14 19.1,10 16.7,7.6C15.6,6.5 14,6 12.3,6L13.1,6.8L11.7,8.2L8.2,4.7L11.7,1.2L13.1,2.6L12,3.8C12,3.8 12,3.9 12,4M12,19.9C11.7,19.9 11.4,20 11.1,20C6.6,20 3,16.4 3,11.9C3,11.6 3,11.3 3,11H1C1,11.3 1,11.6 1,11.9C1,17.5 5.5,22 11.1,22C11.4,22 11.7,22 12,21.9V19.9Z"/></svg><span>When prompted start rotating to your right 360&deg;</span></li>
+ <li><svg class="icon" viewBox="0 0 24 24"><path d="M12.2,19.9C14.6,19.9 16.6,17.9 16.6,15.5C16.6,13.1 14.6,11.1 12.2,11.1C11.2,11.1 9.9,11.9 9.9,11.9C9.9,11.9 9.3,11.4 8.2,11.1C6.2,10.5 4.1,11.9 3.5,13.9C2.8,15.9 4.2,18 6.2,18.7C6.6,18.8 7.1,18.9 7.6,18.9C8.6,18.9 9.6,18.5 10.3,17.7C10.3,17.7 10.6,18.9 12.2,19.9M18,12.5C19.4,12.5 20.5,11.4 20.5,10C20.5,8.6 19.4,7.5 18,7.5C16.6,7.5 15.5,8.6 15.5,10C15.5,11.4 16.6,12.5 18,12.5M19.5,6.5C20.6,6.5 21.5,5.6 21.5,4.5C21.5,3.4 20.6,2.5 19.5,2.5C18.4,2.5 17.5,3.4 17.5,4.5C17.5,5.6 18.4,6.5 19.5,6.5Z"/></svg><span>Move slowly to ensure proper capturing of your environment.</span></li>
  </ul>
  </div>
  <button id="startCaptureButton">Start testing space scan</button>
@@ -292,31 +292,31 @@
 <!-- =========== MAIN APP (File 1 structure with File 2 visuals) =========== -->
 <div class="app-container hidden">
  <header class="app-header">
-  <svg class="header-icon" viewBox="0 0 24 24"><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"></path></svg>
-  <span>Capture testing space scan</span>
+ <svg class="header-icon" viewBox="0 0 24 24"><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"></path></svg>
+ <span>Capture testing space scan</span>
  </header>
  <div class="main-content">
  <div class="camera-view-container" id="camera-view-container">
-  <div class="camera-view" id="camera-view">
-  <video id="video-feed" autoplay playsinline muted></video>
-  <div id="video-overlay"></div>
-  <div class="scan-overlay"></div>
-  <div id="scanArrowContainer" class="scan-arrow">
-   <svg viewBox="0 0 23 30">
-    <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
-   </svg>
-    <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
-        <path d="M8.7,16.4 C8.5,16.6 8.2,16.7 8,16.7 C7.8,16.7 7.5,16.6 7.3,16.4 L2.3,11.4 C1.9,11 1.9,10.4 2.3,10 C2.7,9.6 3.3,9.6 3.7,10 L8,14.3 L20.3,2 C20.7,1.6 21.3,1.6 21.7,2 C22.1,2.4 22.1,3 21.7,3.4 L8.7,16.4 Z" fill="white"/>
-    </svg>
-  </div>
-  <div id="scanLine" class="scan-line"></div>
-  <div id="instructionMessageBox">
-    <span id="instructionMessageText"></span>
-    <a id="instructionResetLink" class="hidden">Let's start over and give it another try.</a>
-  </div>
-  <div id="countdownDisplay"></div>
-  <div id="scanStartMessage"></div>
-  </div>
+ <div class="camera-view" id="camera-view">
+ <video id="video-feed" autoplay playsinline muted></video>
+ <div id="video-overlay"></div>
+ <div class="scan-overlay"></div>
+ <div id="scanArrowContainer" class="scan-arrow">
+  <svg viewBox="0 0 23 30">
+  <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
+  </svg>
+  <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
+    <path d="M8.7,16.4 C8.5,16.6 8.2,16.7 8,16.7 C7.8,16.7 7.5,16.6 7.3,16.4 L2.3,11.4 C1.9,11 1.9,10.4 2.3,10 C2.7,9.6 3.3,9.6 3.7,10 L8,14.3 L20.3,2 C20.7,1.6 21.3,1.6 21.7,2 C22.1,2.4 22.1,3 21.7,3.4 L8.7,16.4 Z" fill="white"/>
+  </svg>
+ </div>
+ <div id="scanLine" class="scan-line"></div>
+ <div id="instructionMessageBox">
+  <span id="instructionMessageText"></span>
+  <a id="instructionResetLink" class="hidden">Let's start over and give it another try.</a>
+ </div>
+ <div id="countdownDisplay"></div>
+ <div id="scanStartMessage"></div>
+ </div>
  </div>
  </div>
  <div class="progress-display" id="progress-display"></div>
@@ -422,8 +422,8 @@
  const MIN_BEEP_INTERVAL = 200;
 
  function toggleSound() {
-  isSoundEnabled = !isSoundEnabled;
-  soundToggle.classList.toggle('on', isSoundEnabled);
+ isSoundEnabled = !isSoundEnabled;
+ soundToggle.classList.toggle('on', isSoundEnabled);
  }
 
  // --- Permission Handling & Audio Setup ---
@@ -432,28 +432,28 @@
  startCaptureButton.textContent = 'Requesting Access...';
 
  if (!audioContext) {
-   try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-   } catch(e) {
-    console.warn("Web Audio API is not supported in this browser.");
-   }
+  try {
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(e) {
+  console.warn("Web Audio API is not supported in this browser.");
+  }
  }
 
  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
  try {
-  const permissionState = await DeviceOrientationEvent.requestPermission();
-  if (permissionState === 'granted') {
-  await initializeApp();
-  } else {
-  permissionError.textContent = "Sensor permission denied.";
-  permissionOverlay.classList.remove('hidden');
-  instructionScreen.classList.add('hidden');
-  }
+ const permissionState = await DeviceOrientationEvent.requestPermission();
+ if (permissionState === 'granted') {
+ await initializeApp();
+ } else {
+ permissionError.textContent = "Sensor permission denied.";
+ permissionOverlay.classList.remove('hidden');
+ instructionScreen.classList.add('hidden');
+ }
  } catch (error) {
-  console.error("Sensor permission error:", error);
-  permissionError.textContent = "Could not get sensor permissions.";
-  permissionOverlay.classList.remove('hidden');
-  instructionScreen.classList.add('hidden');
+ console.error("Sensor permission error:", error);
+ permissionError.textContent = "Could not get sensor permissions.";
+ permissionOverlay.classList.remove('hidden');
+ instructionScreen.classList.add('hidden');
  }
  } else {
  await initializeApp();
@@ -462,32 +462,32 @@
 
  async function initializeApp() {
  try {
-  videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-  videoElement.srcObject = videoStream;
+ videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+ videoElement.srcObject = videoStream;
 
-  if ('ImageCapture' in window) {
+ if ('ImageCapture' in window) {
  const videoTrack = videoStream.getVideoTracks()[0];
  imageCaptureController = new ImageCapture(videoTrack);
-  } else {
+ } else {
  console.warn("ImageCapture API not supported. Falling back to lower quality captures.");
-  }
+ }
 
-  videoElement.onloadedmetadata = () => {
+ videoElement.onloadedmetadata = () => {
  const { videoWidth, videoHeight } = videoElement;
  const aspectRatio = videoHeight / videoWidth;
  cameraViewContainer.style.setProperty('--aspect-ratio', aspectRatio);
  cameraViewContainer.style.paddingBottom = `calc(100% * var(--aspect-ratio, 1.3333))`;
-  };
-  startListening();
-  instructionScreen.classList.add('hidden');
-  appContainer.classList.remove('hidden');
-  showInstructionMessage("Align the arrow with the red line to begin countdown.");
-  videoOverlay.className = 'overlay-yellow';
+ };
+ startListening();
+ instructionScreen.classList.add('hidden');
+ appContainer.classList.remove('hidden');
+ showInstructionMessage("Align the arrow with the red line to begin countdown.");
+ videoOverlay.className = 'overlay-yellow';
  } catch (err) {
-  console.error("Camera error:", err);
-  permissionError.textContent = "Camera access denied. Please check settings.";
-  permissionOverlay.classList.remove('hidden');
-  instructionScreen.classList.add('hidden');
+ console.error("Camera error:", err);
+ permissionError.textContent = "Camera access denied. Please check settings.";
+ permissionOverlay.classList.remove('hidden');
+ instructionScreen.classList.add('hidden');
  }
  }
 
@@ -505,21 +505,22 @@
  countdownDisplay.textContent = count;
  playBeep();
 
- const countdownInterval = setInterval(() => {
-  count--;
-  if (count > 0) {
-  countdownDisplay.textContent = count;
-   playBeep();
-  } else {
-  clearInterval(countdownInterval);
-  countdownDisplay.style.display = 'none';
-  isCountdownActive = false;
-  beginCaptureProcess();
-  }
+ const countdownInterval = setInterval(async () => {
+ count--;
+ if (count > 0) {
+ countdownDisplay.textContent = count;
+  playBeep();
+ } else {
+ clearInterval(countdownInterval);
+ await captureFrame(); // Capture the first frame before starting the process
+ countdownDisplay.style.display = 'none';
+ isCountdownActive = false;
+ beginCaptureProcess(true); // Pass flag to indicate first frame is already taken
+ }
  }, 1000);
  }
 
- async function beginCaptureProcess() {
+ async function beginCaptureProcess(firstFrameCaptured = false) {
  videoOverlay.className = '';
  scanState = 'scanning';
  
@@ -531,21 +532,23 @@
  lastHeadingTimestamp = Date.now();
  smoothedAngularVelocity = 0;
 
+ if (!firstFrameCaptured) {
  await captureFrame();
+ }
 
  scanStartMessage.textContent = "Slowly Begin Rotating";
  scanStartMessage.style.display = 'block';
  scanStartMessage.classList.add('fading-out');
  setTimeout(() => {
-  scanStartMessage.style.display = 'none';
-  scanStartMessage.classList.remove('fading-out');
+ scanStartMessage.style.display = 'none';
+ scanStartMessage.classList.remove('fading-out');
  }, 4000);
 
  scheduleNextBeep();
 
  for (let i = 0; i < TOTAL_FRAMES - 1; i++) {
-  const nextTarget = startHeading - ((i + 1) * DEGREES_PER_FRAME);
-  targetHeadings.push((nextTarget % 360 + 360) % 360);
+ const nextTarget = startHeading - ((i + 1) * DEGREES_PER_FRAME);
+ targetHeadings.push((nextTarget % 360 + 360) % 360);
  }
  }
 
@@ -566,130 +569,130 @@
  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
 
  if (scanState === 'pre-scan' || scanState === 'scanning') {
-  if (isInTightAlignment) {
-   scanArrowContainer.classList.add('locked');
-   scanArrowContainer.style.top = 'calc(50% - 24.5px)';
-   scanArrowContainer.style.transform = 'rotate(0deg)';
-  } else {
-   scanArrowContainer.classList.remove('locked');
-   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-   scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
-  }
+ if (isInTightAlignment) {
+  scanArrowContainer.classList.add('locked');
+  scanArrowContainer.style.top = 'calc(50% - 24.5px)';
+  scanArrowContainer.style.transform = 'rotate(0deg)';
+ } else {
+  scanArrowContainer.classList.remove('locked');
+  const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+  scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+  scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
+ }
  }
 
  if (scanState === 'pre-scan') {
-  if (deviation < PITCH_TOLERANCE_GOOD) {
-    arrowShape.style.fill = COLOR_GOOD;
-  } else {
-    arrowShape.style.fill = COLOR_OK;
-  }
+ if (deviation < PITCH_TOLERANCE_GOOD) {
+  arrowShape.style.fill = COLOR_GOOD;
+ } else {
+  arrowShape.style.fill = COLOR_OK;
+ }
 
-  if (isInTightAlignment) {
-    if (alignmentHoldTimer === null && !isCountdownActive) {
-      alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
-    }
-  } else {
-    if (alignmentHoldTimer) {
-      clearTimeout(alignmentHoldTimer);
-      alignmentHoldTimer = null;
-    }
+ if (isInTightAlignment) {
+  if (alignmentHoldTimer === null && !isCountdownActive) {
+   alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
   }
+ } else {
+  if (alignmentHoldTimer) {
+   clearTimeout(alignmentHoldTimer);
+   alignmentHoldTimer = null;
+  }
+ }
  } else if (scanState === 'scanning') {
-  let degreesRotated = (startHeading - currentHeading + 360) % 360;
+ let degreesRotated = (startHeading - currentHeading + 360) % 360;
 
-  const currentTime = Date.now();
-  const deltaTime = (currentTime - lastHeadingTimestamp) / 1000;
-  let angularVelocity = 0;
+ const currentTime = Date.now();
+ const deltaTime = (currentTime - lastHeadingTimestamp) / 1000;
+ let angularVelocity = 0;
 
-  if (deltaTime > 0.01) {
-    let headingDiff = currentHeading - previousHeading;
-    if (headingDiff < -180) headingDiff += 360;
-    if (headingDiff > 180) headingDiff -= 360;
-    angularVelocity = Math.abs(headingDiff / deltaTime);
+ if (deltaTime > 0.01) {
+  let headingDiff = currentHeading - previousHeading;
+  if (headingDiff < -180) headingDiff += 360;
+  if (headingDiff > 180) headingDiff -= 360;
+  angularVelocity = Math.abs(headingDiff / deltaTime);
+ }
+  
+ smoothedAngularVelocity = (smoothedAngularVelocity * (1 - VELOCITY_SMOOTHING_FACTOR)) + (angularVelocity * VELOCITY_SMOOTHING_FACTOR);
+  
+ previousHeading = currentHeading;
+ lastHeadingTimestamp = currentTime;
+
+ const velocityRatio = Math.min(1, smoothedAngularVelocity / VELOCITY_WARNING_THRESHOLD);
+ currentBeepInterval = MAX_BEEP_INTERVAL - (MAX_BEEP_INTERVAL - MIN_BEEP_INTERVAL) * velocityRatio;
+  
+ let warningMessageToShow = null;
+ let isDangerCondition = false;
+  
+ if (degreesRotated > 40 && smoothedAngularVelocity > VELOCITY_DANGER_THRESHOLD) {
+  isDangerCondition = true;
+ } else if (smoothedAngularVelocity > VELOCITY_WARNING_THRESHOLD) {
+  warningMessageToShow = "Please slow down. Rotating too quickly can cause motion blur and reduce video quality.";
+ }
+  
+ if (!isDangerCondition && !warningMessageToShow) {
+  if (!isInTightAlignment && (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE)) {
+   warningMessageToShow = "Realign the arrow by rotating your phone to the left or right or forward or back.";
   }
-   
-  smoothedAngularVelocity = (smoothedAngularVelocity * (1 - VELOCITY_SMOOTHING_FACTOR)) + (angularVelocity * VELOCITY_SMOOTHING_FACTOR);
-   
-  previousHeading = currentHeading;
-  lastHeadingTimestamp = currentTime;
+ }
 
-  const velocityRatio = Math.min(1, smoothedAngularVelocity / VELOCITY_WARNING_THRESHOLD);
-  currentBeepInterval = MAX_BEEP_INTERVAL - (MAX_BEEP_INTERVAL - MIN_BEEP_INTERVAL) * velocityRatio;
-   
-  let warningMessageToShow = null;
-  let isDangerCondition = false;
-   
-  if (degreesRotated > 40 && smoothedAngularVelocity > VELOCITY_DANGER_THRESHOLD) {
-    isDangerCondition = true;
-  } else if (smoothedAngularVelocity > VELOCITY_WARNING_THRESHOLD) {
-    warningMessageToShow = "Please slow down. Rotating too quickly can cause motion blur and reduce video quality.";
-  }
-   
-  if (!isDangerCondition && !warningMessageToShow) {
-    if (!isInTightAlignment && (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE)) {
-      warningMessageToShow = "Realign the arrow by rotating your phone to the left or right or forward or back.";
-    }
-  }
+ if (isDangerCondition) {
+  scanState = 'error';
+  videoOverlay.className = 'overlay-red';
+  arrowShape.style.fill = COLOR_BAD;
+  showInstructionMessage("You rotated the camera too quickly, but you're doing great!", true);
+  clearTimeout(messageHideTimeout);
+  return;
+ }
 
-  if (isDangerCondition) {
-    scanState = 'error';
-    videoOverlay.className = 'overlay-red';
-    arrowShape.style.fill = COLOR_BAD;
-    showInstructionMessage("You rotated the camera too quickly, but you're doing great!", true);
-    clearTimeout(messageHideTimeout);
-    return;
-  }
-
-  if (warningMessageToShow) {
-    clearTimeout(messageHideTimeout);
-    messageHideTimeout = null;
-    showInstructionMessage(warningMessageToShow);
-    arrowShape.style.fill = COLOR_OK;
-  } else {
-    arrowShape.style.fill = COLOR_GOOD;
-    if (instructionMessageBox.style.display === 'block' && !messageHideTimeout) {
-      instructionMessageBox.classList.add('fading-out');
-      messageHideTimeout = setTimeout(() => {
-        hideInstructionMessage();
-        messageHideTimeout = null;
-      }, 2000);
-    }
-  }
-
-  if (nextHeadingIndex === 0 && degreesRotated > 180) {
-    degreesRotated = 0;
-  }
-  const arrowLeftPercent = 10 + (degreesRotated / 360) * 80;
-  scanArrowContainer.style.left = `${arrowLeftPercent}%`;
-
-  if (isCapturing || nextHeadingIndex >= targetHeadings.length) return;
-
-  const target = targetHeadings[nextHeadingIndex];
-  let diff = target - currentHeading;
-  if (diff > 180) diff -= 360;
-  if (diff < -180) diff += 360;
-
-  if (Math.abs(diff) < CAPTURE_WINDOW_DEGREES) {
-   isCapturing = true;
-   await captureFrame();
-   nextHeadingIndex++;
-
-   if (capturedFrames.length >= TOTAL_FRAMES) {
-    scanState = 'complete';
+ if (warningMessageToShow) {
+  clearTimeout(messageHideTimeout);
+  messageHideTimeout = null;
+  showInstructionMessage(warningMessageToShow);
+  arrowShape.style.fill = COLOR_OK;
+ } else {
+  arrowShape.style.fill = COLOR_GOOD;
+  if (instructionMessageBox.style.display === 'block' && !messageHideTimeout) {
+   instructionMessageBox.classList.add('fading-out');
+   messageHideTimeout = setTimeout(() => {
     hideInstructionMessage();
-    videoOverlay.className = 'overlay-green';
-    clearTimeout(beepTimeoutId);
-    scanArrowContainer.style.left = 'calc(95% - 68px)';
-    scanArrowContainer.style.top = 'calc(50% - 24.5px)';
-    scanArrowContainer.style.transform = 'rotate(0deg)';
-    arrowShape.style.fill = 'var(--target-color-light)';
-    arrowShape.style.stroke = '#FFFFFF';
-    completionCheck.classList.remove('hidden');
-    submitAction();
-   }
-   isCapturing = false;
+    messageHideTimeout = null;
+   }, 2000);
   }
+ }
+
+ if (nextHeadingIndex === 0 && degreesRotated > 180) {
+  degreesRotated = 0;
+ }
+ const arrowLeftPercent = 10 + (degreesRotated / 360) * 80;
+ scanArrowContainer.style.left = `${arrowLeftPercent}%`;
+
+ if (isCapturing || nextHeadingIndex >= targetHeadings.length) return;
+
+ const target = targetHeadings[nextHeadingIndex];
+ let diff = target - currentHeading;
+ if (diff > 180) diff -= 360;
+ if (diff < -180) diff += 360;
+
+ if (Math.abs(diff) < CAPTURE_WINDOW_DEGREES) {
+  isCapturing = true;
+  await captureFrame();
+  nextHeadingIndex++;
+
+  if (capturedFrames.length >= TOTAL_FRAMES) {
+  scanState = 'complete';
+  hideInstructionMessage();
+  videoOverlay.className = 'overlay-green';
+  clearTimeout(beepTimeoutId);
+  scanArrowContainer.style.left = 'calc(95% - 68px)';
+  scanArrowContainer.style.top = 'calc(50% - 24.5px)';
+  scanArrowContainer.style.transform = 'rotate(0deg)';
+  arrowShape.style.fill = 'var(--target-color-light)';
+  arrowShape.style.stroke = '#FFFFFF';
+  completionCheck.classList.remove('hidden');
+  submitAction();
+  }
+  isCapturing = false;
+ }
  }
  }
 
@@ -697,25 +700,25 @@
  async function captureFrame() {
  isCapturing = true;
  if (!imageCaptureController) {
-  const canvas = document.createElement('canvas');
-  canvas.width = videoElement.videoWidth;
-  canvas.height = videoElement.videoHeight;
-  canvas.getContext('2d').drawImage(videoElement, 0, 0);
-  const dataUrl = canvas.toDataURL('image/jpeg');
-  capturedFrames.push(dataUrl);
-  updateProgressDisplay(dataUrl, capturedFrames.length - 1);
-  isCapturing = false;
-  return;
+ const canvas = document.createElement('canvas');
+ canvas.width = videoElement.videoWidth;
+ canvas.height = videoElement.videoHeight;
+ canvas.getContext('2d').drawImage(videoElement, 0, 0);
+ const dataUrl = canvas.toDataURL('image/jpeg');
+ capturedFrames.push(dataUrl);
+ updateProgressDisplay(dataUrl, capturedFrames.length - 1);
+ isCapturing = false;
+ return;
  }
  try {
-  const blob = await imageCaptureController.takePhoto();
-  const dataUrl = await new Promise(resolve => {
-  const reader = new FileReader();
-  reader.onloadend = () => resolve(reader.result);
-  reader.readAsDataURL(blob);
-  });
-  capturedFrames.push(dataUrl);
-  updateProgressDisplay(dataUrl, capturedFrames.length - 1);
+ const blob = await imageCaptureController.takePhoto();
+ const dataUrl = await new Promise(resolve => {
+ const reader = new FileReader();
+ reader.onloadend = () => resolve(reader.result);
+ reader.readAsDataURL(blob);
+ });
+ capturedFrames.push(dataUrl);
+ updateProgressDisplay(dataUrl, capturedFrames.length - 1);
  } catch (error) { console.error('takePhoto() error:', error); }
  isCapturing = false;
  }
@@ -748,99 +751,99 @@
  reviewImage.classList.toggle('zoomed-in', isZoomed);
  reviewInstructions.style.display = isZoomed ? 'none' : 'block';
  if (isZoomed) {
-  reviewOverlay.style.justifyContent = 'flex-start';
-  reviewOverlay.style.alignItems = 'flex-start';
-  requestAnimationFrame(() => {
-  reviewOverlay.scrollLeft = (reviewImage.scrollWidth - reviewOverlay.clientWidth) / 2;
-  reviewOverlay.scrollTop = (reviewImage.scrollHeight - reviewOverlay.clientHeight) / 2;
-  });
+ reviewOverlay.style.justifyContent = 'flex-start';
+ reviewOverlay.style.alignItems = 'flex-start';
+ requestAnimationFrame(() => {
+ reviewOverlay.scrollLeft = (reviewImage.scrollWidth - reviewOverlay.clientWidth) / 2;
+ reviewOverlay.scrollTop = (reviewImage.scrollHeight - reviewOverlay.clientHeight) / 2;
+ });
  } else {
-  reviewOverlay.style.justifyContent = 'center';
-  reviewOverlay.style.alignItems = 'center';
-  reviewOverlay.scrollTop = 0;
-  reviewOverlay.scrollLeft = 0;
+ reviewOverlay.style.justifyContent = 'center';
+ reviewOverlay.style.alignItems = 'center';
+ reviewOverlay.scrollTop = 0;
+ reviewOverlay.scrollLeft = 0;
  }
  }
 
  // Popup and Reset Functions
  function showInstructionMessage(message, showReset = false) {
-  clearTimeout(messageHideTimeout);
-  instructionMessageBox.classList.remove('fading-out');
-  instructionMessageBox.style.opacity = 1;
-  instructionMessageText.textContent = message;
-  instructionResetLink.classList.toggle('hidden', !showReset);
-  instructionMessageBox.style.display = 'block';
+ clearTimeout(messageHideTimeout);
+ instructionMessageBox.classList.remove('fading-out');
+ instructionMessageBox.style.opacity = 1;
+ instructionMessageText.textContent = message;
+ instructionResetLink.classList.toggle('hidden', !showReset);
+ instructionMessageBox.style.display = 'block';
  }
 
  function hideInstructionMessage() {
-  instructionMessageBox.style.display = 'none';
+ instructionMessageBox.style.display = 'none';
  }
 
  function resetAppToInstructions() {
-  if (videoStream) {
-    videoStream.getTracks().forEach(track => track.stop());
-    videoStream = null;
-  }
-  clearTimeout(beepTimeoutId);
-  if (alignmentHoldTimer) {
-    clearTimeout(alignmentHoldTimer);
-    alignmentHoldTimer = null;
-  }
-  scanState = 'pre-scan';
-  capturedFrames = [];
-  targetHeadings = [];
-  nextHeadingIndex = 0;
-  isCapturing = false;
-  currentHeading = 0;
-  startHeading = 0;
-  isCountdownActive = false;
-  smoothedAngularVelocity = 0;
-   
-  progressDisplay.innerHTML = '';
-  hideInstructionMessage();
-  videoOverlay.className = '';
-  scanStartMessage.style.display = 'none';
-  scanStartMessage.classList.remove('fading-out');
-  scanArrowContainer.style.left = '10px';
-  scanArrowContainer.classList.remove('locked');
-  completionCheck.classList.add('hidden');
-  appContainer.classList.add('hidden');
-  instructionScreen.classList.remove('hidden');
-  startCaptureButton.disabled = false;
-  startCaptureButton.textContent = 'Start testing space scan';
-  arrowShape.style.stroke = 'black';
-  arrowShape.style.fill = COLOR_BAD;
+ if (videoStream) {
+  videoStream.getTracks().forEach(track => track.stop());
+  videoStream = null;
+ }
+ clearTimeout(beepTimeoutId);
+ if (alignmentHoldTimer) {
+  clearTimeout(alignmentHoldTimer);
+  alignmentHoldTimer = null;
+ }
+ scanState = 'pre-scan';
+ capturedFrames = [];
+ targetHeadings = [];
+ nextHeadingIndex = 0;
+ isCapturing = false;
+ currentHeading = 0;
+ startHeading = 0;
+ isCountdownActive = false;
+ smoothedAngularVelocity = 0;
+  
+ progressDisplay.innerHTML = '';
+ hideInstructionMessage();
+ videoOverlay.className = '';
+ scanStartMessage.style.display = 'none';
+ scanStartMessage.classList.remove('fading-out');
+ scanArrowContainer.style.left = '10px';
+ scanArrowContainer.classList.remove('locked');
+ completionCheck.classList.add('hidden');
+ appContainer.classList.add('hidden');
+ instructionScreen.classList.remove('hidden');
+ startCaptureButton.disabled = false;
+ startCaptureButton.textContent = 'Start testing space scan';
+ arrowShape.style.stroke = 'black';
+ arrowShape.style.fill = COLOR_BAD;
  }
 
  // Audio Functions
  function playBeep() {
-  if (!audioContext || !isSoundEnabled) return;
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
+ if (!audioContext || !isSoundEnabled) return;
+ const oscillator = audioContext.createOscillator();
+ const gainNode = audioContext.createGain();
 
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
+ oscillator.connect(gainNode);
+ gainNode.connect(audioContext.destination);
 
-  oscillator.type = 'sine';
-  oscillator.frequency.value = 880;
+ oscillator.type = 'sine';
+ oscillator.frequency.value = 880;
 
-  const now = audioContext.currentTime;
-  gainNode.gain.setValueAtTime(0, now);
-  gainNode.gain.linearRampToValueAtTime(0.2, now + 0.02);
-  gainNode.gain.linearRampToValueAtTime(0, now + 0.1);
+ const now = audioContext.currentTime;
+ gainNode.gain.setValueAtTime(0, now);
+ gainNode.gain.linearRampToValueAtTime(0.2, now + 0.02);
+ gainNode.gain.linearRampToValueAtTime(0, now + 0.1);
 
-  oscillator.start(now);
-  oscillator.stop(now + 0.1);
+ oscillator.start(now);
+ oscillator.stop(now + 0.1);
  }
  
  function scheduleNextBeep() {
-  if (scanState !== 'scanning') {
-   clearTimeout(beepTimeoutId);
-   beepTimeoutId = null;
-   return;
-  }
-  playBeep();
-  beepTimeoutId = setTimeout(scheduleNextBeep, currentBeepInterval);
+ if (scanState !== 'scanning') {
+  clearTimeout(beepTimeoutId);
+  beepTimeoutId = null;
+  return;
+ }
+ playBeep();
+ beepTimeoutId = setTimeout(scheduleNextBeep, currentBeepInterval);
  }
 
  // --- UNCHANGED FUNCTIONS ---
@@ -871,16 +874,16 @@
  const isPan = Math.abs(deltaX) > GESTURE_THRESHOLD || Math.abs(deltaY) > GESTURE_THRESHOLD;
  if (isZoomed) { if (!isPan) { toggleZoom(); } return; }
  if (isPan) {
-  clearTimeout(tapTimer); tapTimer = null;
-  if (deltaX < -GESTURE_THRESHOLD) { currentReviewIndex = (currentReviewIndex + 1) % capturedFrames.length; }
-  else if (deltaX > GESTURE_THRESHOLD) { currentReviewIndex = (currentReviewIndex - 1 + capturedFrames.length) % capturedFrames.length; }
-  reviewImage.src = capturedFrames[currentReviewIndex];
+ clearTimeout(tapTimer); tapTimer = null;
+ if (deltaX < -GESTURE_THRESHOLD) { currentReviewIndex = (currentReviewIndex + 1) % capturedFrames.length; }
+ else if (deltaX > GESTURE_THRESHOLD) { currentReviewIndex = (currentReviewIndex - 1 + capturedFrames.length) % capturedFrames.length; }
+ reviewImage.src = capturedFrames[currentReviewIndex];
  } else {
-  if (tapTimer === null) {
-  tapTimer = setTimeout(() => { tapTimer = null; hideReviewImage(); }, DOUBLE_TAP_DELAY);
-  } else {
-  clearTimeout(tapTimer); tapTimer = null; toggleZoom();
-  }
+ if (tapTimer === null) {
+ tapTimer = setTimeout(() => { tapTimer = null; hideReviewImage(); }, DOUBLE_TAP_DELAY);
+ } else {
+ clearTimeout(tapTimer); tapTimer = null; toggleZoom();
+ }
  }
  });
  
@@ -888,25 +891,25 @@
  if (capturedFrames.length === 0) { return; }
  appStatus.textContent = "";
  try {
-  const zip = new JSZip();
-  capturedFrames.forEach((dataUrl, index) => {
-  const paddedIndex = String(index + 1).padStart(2, '0');
-  const base64Data = dataUrl.substring(dataUrl.indexOf(',') + 1);
-  zip.file(`image_${paddedIndex}.jpeg`, base64Data, { base64: true });
-  });
-  const zipBlob = await zip.generateAsync({ type: "blob", compression: "DEFLATE" });
-  const downloadLink = document.createElement('a');
-  const url = URL.createObjectURL(zipBlob);
-  downloadLink.href = url;
-  downloadLink.download = 'room_scan.zip';
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-  URL.revokeObjectURL(url);
-  appStatus.textContent = "";
+ const zip = new JSZip();
+ capturedFrames.forEach((dataUrl, index) => {
+ const paddedIndex = String(index + 1).padStart(2, '0');
+ const base64Data = dataUrl.substring(dataUrl.indexOf(',') + 1);
+ zip.file(`image_${paddedIndex}.jpeg`, base64Data, { base64: true });
+ });
+ const zipBlob = await zip.generateAsync({ type: "blob", compression: "DEFLATE" });
+ const downloadLink = document.createElement('a');
+ const url = URL.createObjectURL(zipBlob);
+ downloadLink.href = url;
+ downloadLink.download = 'room_scan.zip';
+ document.body.appendChild(downloadLink);
+ downloadLink.click();
+ document.body.removeChild(downloadLink);
+ URL.revokeObjectURL(url);
+ appStatus.textContent = "";
  } catch(err) {
-  console.error("Error creating zip file:", err);
-  appStatus.textContent = "";
+ console.error("Error creating zip file:", err);
+ appStatus.textContent = "";
  }
  }
 
