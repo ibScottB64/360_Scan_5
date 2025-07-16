@@ -174,12 +174,12 @@
  /* MODIFICATION START: Styles for completion checkmark */
  #completion-check {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 40px; /* MODIFIED */
+  height: 40px; /* MODIFIED */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1; /* Sits on top of the arrow shape within the same container */
+  transform: translate(-50%, calc(-50% + 10px)); /* MODIFIED */
+  z-index: 1;
  }
  /* MODIFICATION END */
  .scan-line {
@@ -270,7 +270,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
   <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.11</div>
+  <div class="version-display">v 1.12</div>
   <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
@@ -302,11 +302,9 @@
    <svg viewBox="0 0 23 30">
     <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
    </svg>
-    <!-- MODIFICATION START: Checkmark SVG added -->
     <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="white"/>
     </svg>
-    <!-- MODIFICATION END -->
   </div>
   <div id="scanLine" class="scan-line"></div>
   <div id="instructionMessageBox">
@@ -344,7 +342,7 @@
  const videoOverlay = document.getElementById('video-overlay');
  const scanArrowContainer = document.getElementById('scanArrowContainer');
  const arrowShape = document.getElementById('arrow-shape');
- const completionCheck = document.getElementById('completion-check'); // MODIFICATION
+ const completionCheck = document.getElementById('completion-check');
  const scanLine = document.getElementById('scanLine');
  const instructionMessageBox = document.getElementById('instructionMessageBox');
  const instructionMessageText = document.getElementById('instructionMessageText');
@@ -682,7 +680,7 @@
     scanArrowContainer.style.transform = 'rotate(0deg)';
     arrowShape.style.fill = 'var(--target-color-light)';
     arrowShape.style.stroke = '#FFFFFF';
-    completionCheck.classList.remove('hidden'); // MODIFICATION
+    completionCheck.classList.remove('hidden');
     submitAction();
    }
    isCapturing = false;
@@ -795,11 +793,9 @@
   videoOverlay.className = '';
   scanStartMessage.style.display = 'none';
   scanStartMessage.classList.remove('fading-out');
-  // MODIFICATION START: Explicitly reset arrow position and state
   scanArrowContainer.style.left = '10px';
   scanArrowContainer.classList.remove('locked');
   completionCheck.classList.add('hidden');
-  // MODIFICATION END
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
