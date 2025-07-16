@@ -171,6 +171,17 @@
   transition: left 0.1s linear;
  }
  #arrow-shape { transition: fill 0.2s linear; }
+ /* MODIFICATION START: Styles for completion checkmark */
+ #completion-check {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Sits on top of the arrow shape within the same container */
+ }
+ /* MODIFICATION END */
  .scan-line {
  position: absolute;
  top: calc(50% + 13px);
@@ -218,7 +229,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 3rem; /* MODIFIED */
+  font-size: 3rem;
   font-weight: 700;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
@@ -291,6 +302,11 @@
    <svg viewBox="0 0 23 30">
     <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
    </svg>
+    <!-- MODIFICATION START: Checkmark SVG added -->
+    <svg id="completion-check" class="hidden" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="white"/>
+    </svg>
+    <!-- MODIFICATION END -->
   </div>
   <div id="scanLine" class="scan-line"></div>
   <div id="instructionMessageBox">
@@ -328,6 +344,7 @@
  const videoOverlay = document.getElementById('video-overlay');
  const scanArrowContainer = document.getElementById('scanArrowContainer');
  const arrowShape = document.getElementById('arrow-shape');
+ const completionCheck = document.getElementById('completion-check'); // MODIFICATION
  const scanLine = document.getElementById('scanLine');
  const instructionMessageBox = document.getElementById('instructionMessageBox');
  const instructionMessageText = document.getElementById('instructionMessageText');
@@ -601,13 +618,11 @@
   let warningMessageToShow = null;
   let isDangerCondition = false;
    
-  // MODIFICATION START: Grace period logic for velocity checks
   if (degreesRotated > 40 && smoothedAngularVelocity > VELOCITY_DANGER_THRESHOLD) {
     isDangerCondition = true;
   } else if (smoothedAngularVelocity > VELOCITY_WARNING_THRESHOLD) {
     warningMessageToShow = "Please slow down. Rotating too quickly can cause motion blur and reduce video quality.";
   }
-  // MODIFICATION END
    
   if (!isDangerCondition && !warningMessageToShow) {
     if (!isInTightAlignment && (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE)) {
@@ -667,6 +682,7 @@
     scanArrowContainer.style.transform = 'rotate(0deg)';
     arrowShape.style.fill = 'var(--target-color-light)';
     arrowShape.style.stroke = '#FFFFFF';
+    completionCheck.classList.remove('hidden'); // MODIFICATION
     submitAction();
    }
    isCapturing = false;
@@ -779,6 +795,11 @@
   videoOverlay.className = '';
   scanStartMessage.style.display = 'none';
   scanStartMessage.classList.remove('fading-out');
+  // MODIFICATION START: Explicitly reset arrow position and state
+  scanArrowContainer.style.left = '10px';
+  scanArrowContainer.classList.remove('locked');
+  completionCheck.classList.add('hidden');
+  // MODIFICATION END
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
