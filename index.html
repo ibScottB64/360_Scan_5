@@ -208,7 +208,6 @@
  transform: translate(-50%, -50%); font-size: 20rem; font-weight: 700;
  color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); z-index: 25;
  }
- /* MODIFICATION START: Styles and animation for scan start message */
  @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
@@ -219,7 +218,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 5rem;
+  font-size: 3rem; /* MODIFIED */
   font-weight: 700;
   color: white;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
@@ -230,7 +229,6 @@
  #scanStartMessage.fading-out {
   animation: fadeOut 2s ease-out forwards;
  }
- /* MODIFICATION END */
  .control-panel { display: none; } /* Hidden for now */
  .progress-display { display: flex; align-items: center; gap: 0; padding: 12px; overflow-x: auto; min-height: 52px; box-sizing: border-box;}
  .progress-frame { flex-shrink: 0; height: 50px; width: 37.5px; background-color: var(--secondary-bg); border-radius: 4px; border: 1px solid #CCC; background-size: cover; background-position: center; cursor: pointer; }
@@ -261,7 +259,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
   <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
-  <div class="version-display">v 1.10</div>
+  <div class="version-display">v 1.11</div>
   <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
@@ -300,7 +298,7 @@
     <a id="instructionResetLink" class="hidden">Let's start over and give it another try.</a>
   </div>
   <div id="countdownDisplay"></div>
-  <div id="scanStartMessage"></div><!-- MODIFICATION: New message element -->
+  <div id="scanStartMessage"></div>
   </div>
  </div>
  </div>
@@ -335,7 +333,7 @@
  const instructionMessageText = document.getElementById('instructionMessageText');
  const instructionResetLink = document.getElementById('instructionResetLink');
  const countdownDisplay = document.getElementById('countdownDisplay');
- const scanStartMessage = document.getElementById('scanStartMessage'); // MODIFICATION
+ const scanStartMessage = document.getElementById('scanStartMessage');
  const appStatus = document.getElementById('app-status');
  const progressDisplay = document.getElementById('progress-display');
  const reviewOverlay = document.getElementById('review-overlay');
@@ -395,7 +393,6 @@
  // State for velocity calculation
  let lastHeadingTimestamp = 0;
  let previousHeading = 0;
- let isVelocityCheckActive = false;
  let smoothedAngularVelocity = 0;
 
  // State for message timer and audio
@@ -508,7 +505,6 @@
  videoOverlay.className = '';
  scanState = 'scanning';
  
- // MODIFICATION START: Display and fade out the start message
  scanStartMessage.textContent = "Slowly Begin Rotating";
  scanStartMessage.style.display = 'block';
  scanStartMessage.classList.add('fading-out');
@@ -516,7 +512,6 @@
   scanStartMessage.style.display = 'none';
   scanStartMessage.classList.remove('fading-out');
  }, 2000);
- // MODIFICATION END
 
  startHeading = currentHeading;
  targetHeadings = [];
@@ -524,7 +519,6 @@
   
  previousHeading = currentHeading;
  lastHeadingTimestamp = Date.now();
- isVelocityCheckActive = false;
  smoothedAngularVelocity = 0;
 
  await captureFrame();
@@ -550,29 +544,33 @@
  const pitchOffset = beta - TARGET_PITCH;
  const deviation = Math.abs(pitchOffset);
  const rollDeviation = Math.abs(smoothedRoll);
+ const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
+
+ if (scanState === 'pre-scan' || scanState === 'scanning') {
+  if (isInTightAlignment) {
+   scanArrowContainer.classList.add('locked');
+   scanArrowContainer.style.top = 'calc(50% - 24.5px)';
+   scanArrowContainer.style.transform = 'rotate(0deg)';
+  } else {
+   scanArrowContainer.classList.remove('locked');
+   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
+   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
+   scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
+  }
+ }
 
  if (scanState === 'pre-scan') {
-  // Visual indicator (wider tolerance)
   if (deviation < PITCH_TOLERANCE_GOOD) {
     arrowShape.style.fill = COLOR_GOOD;
   } else {
     arrowShape.style.fill = COLOR_OK;
   }
 
-  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
-
   if (isInTightAlignment) {
-    scanArrowContainer.classList.add('locked');
-    scanArrowContainer.style.top = `calc(50% - 24.5px)`;
-    scanArrowContainer.style.transform = `rotate(0deg)`;
     if (alignmentHoldTimer === null && !isCountdownActive) {
       alignmentHoldTimer = setTimeout(startCountdownSequence, ALIGNMENT_HOLD_TIME);
     }
   } else {
-    scanArrowContainer.classList.remove('locked');
-    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
     if (alignmentHoldTimer) {
       clearTimeout(alignmentHoldTimer);
       alignmentHoldTimer = null;
@@ -580,10 +578,6 @@
   }
  } else if (scanState === 'scanning') {
   let degreesRotated = (startHeading - currentHeading + 360) % 360;
-
-  if (!isVelocityCheckActive && degreesRotated > 10 && degreesRotated < 180) {
-    isVelocityCheckActive = true;
-  }
 
   const currentTime = Date.now();
   const deltaTime = (currentTime - lastHeadingTimestamp) / 1000;
@@ -607,31 +601,18 @@
   let warningMessageToShow = null;
   let isDangerCondition = false;
    
-  if (isVelocityCheckActive) {
-    if (smoothedAngularVelocity > VELOCITY_DANGER_THRESHOLD) {
-      isDangerCondition = true;
-    } else if (smoothedAngularVelocity > VELOCITY_WARNING_THRESHOLD) {
-      warningMessageToShow = "Please slow down. Rotating too quickly can cause motion blur and reduce video quality.";
-    }
+  // MODIFICATION START: Grace period logic for velocity checks
+  if (degreesRotated > 40 && smoothedAngularVelocity > VELOCITY_DANGER_THRESHOLD) {
+    isDangerCondition = true;
+  } else if (smoothedAngularVelocity > VELOCITY_WARNING_THRESHOLD) {
+    warningMessageToShow = "Please slow down. Rotating too quickly can cause motion blur and reduce video quality.";
   }
+  // MODIFICATION END
    
-  const isInTightAlignment = deviation < PITCH_TOLERANCE_COUNTDOWN && rollDeviation < ROLL_TOLERANCE_COUNTDOWN;
-
   if (!isDangerCondition && !warningMessageToShow) {
     if (!isInTightAlignment && (deviation > PITCH_SCAN_TOLERANCE || rollDeviation > ROLL_SCAN_TOLERANCE)) {
       warningMessageToShow = "Realign the arrow by rotating your phone to the left or right or forward or back.";
     }
-  }
-
-  if (isInTightAlignment) {
-    scanArrowContainer.classList.add('locked');
-    scanArrowContainer.style.top = `calc(50% - 24.5px)`;
-    scanArrowContainer.style.transform = `rotate(0deg)`;
-  } else {
-    scanArrowContainer.classList.remove('locked');
-    const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
-    scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
-    scanArrowContainer.style.transform = `rotate(${rotation}deg)`;
   }
 
   if (isDangerCondition) {
@@ -796,8 +777,8 @@
   progressDisplay.innerHTML = '';
   hideInstructionMessage();
   videoOverlay.className = '';
-  scanStartMessage.style.display = 'none'; // MODIFICATION
-  scanStartMessage.classList.remove('fading-out'); // MODIFICATION
+  scanStartMessage.style.display = 'none';
+  scanStartMessage.classList.remove('fading-out');
   appContainer.classList.add('hidden');
   instructionScreen.classList.remove('hidden');
   startCaptureButton.disabled = false;
