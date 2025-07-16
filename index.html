@@ -118,7 +118,6 @@
  max-width: 480px; height: 100dvh; margin: 0 auto;
  background-color: #000; box-shadow: 0 0 20px rgba(0,0,0,0.1);
  }
- /* MODIFICATION START: App Header Styles */
  .app-header {
   display: flex;
   align-items: center;
@@ -135,7 +134,6 @@
   fill: #f0f0f0;
   margin-right: 12px;
  }
- /* MODIFICATION END */
  .main-content { display: flex; min-height: 0; }
  .camera-view-container {
  flex-grow: 1; position: relative; min-width: 0; background-color: #111;
@@ -153,8 +151,9 @@
  border: 3px dashed rgba(255, 255, 255, 0.7); border-radius: 10px;
  }
  .scan-arrow {
- position: absolute; left: 10px; /* JS will set top, left and transform */
+ position: absolute; left: 10px;
  width: 58px; height: 43px; transition: top 0.1s linear, left 0.1s linear;
+ z-index: 22; /* MODIFIED: Set z-index to be on top */
  }
  #arrow-shape { transition: fill 0.2s linear; }
  .scan-line {
@@ -162,32 +161,32 @@
  top: calc(50% + 13px);
  left: 5%;
  right: 5%;
- height: 6px; /* MODIFIED */
- background-color: rgba(231, 76, 60, 0.75); /* MODIFIED */
+ height: 6px;
+ background-color: rgba(231, 76, 60, 0.75);
  transform: translateY(-50%);
  }
  #instructionMessageBox {
  display: none; position: absolute;
- bottom: calc(50% + 40px); /* MODIFIED: Moved up */
+ bottom: calc(50% + 40px);
  left: 50%; transform: translateX(-50%);
  width: 70%; max-width: 300px;
  background-color: rgba(190, 190, 190, 0.85);
  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
  color: #000;
- font-weight: 600; /* MODIFIED */
+ font-weight: 600;
  padding: 1rem; border-radius: 15px;
  text-align: center;
- font-size: 1.1rem; /* MODIFIED */
+ font-size: 1.1rem;
  line-height: 1.4; z-index: 20;
  }
- /* Style for the reset link */
  #instructionResetLink {
   display: block;
   margin-top: 0.75rem;
   color: #007BFF;
   text-decoration: underline;
-  font-weight: 500;
+  font-weight: 500; /* MODIFIED: Restored original weight */
   cursor: pointer;
+   font-size: 0.9rem; /* MODIFIED: Restored original size */
  }
  #countdownDisplay {
  display: none; position: absolute; top: 50%; left: 50%;
@@ -222,7 +221,7 @@
 <!-- MODIFICATION START: All top-bar controls are now in a flex container for alignment -->
 <div id="top-bar-controls">
  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
- <div class="version-display">v 1.5</div>
+ <div class="version-display">v 1.6</div>
  <div id="soundToggle" class="sound-toggle">s</div>
 </div>
 <!-- MODIFICATION END -->
@@ -312,8 +311,8 @@
  const soundToggle = document.getElementById('soundToggle');
 
  // --- State and Configuration Variables ---
- let isCountdownActive = false; // MODIFIED: countdownStartTimer removed
- let scanState = 'pre-scan'; // 'pre-scan', 'scanning', 'paused', 'complete', 'error'
+ let isCountdownActive = false;
+ let scanState = 'pre-scan';
  let capturedFrames = [];
  let videoStream = null;
  let imageCaptureController = null;
@@ -339,7 +338,7 @@
  const ARROW_HALF_HEIGHT_PX = 21.5;
 
  // Colors for alignment arrow
- const COLOR_GOOD = 'var(--target-color-light)', COLOR_OK = '#f1c40f', COLOR_BAD = '#e74c3c'; // MODIFIED
+ const COLOR_GOOD = 'var(--target-color-light)', COLOR_OK = '#f1c40f', COLOR_BAD = '#e74c3c';
 
  let currentHeading = 0, startHeading = 0;
  let targetHeadings = [], nextHeadingIndex = 0;
@@ -377,7 +376,6 @@
  startCaptureButton.disabled = true;
  startCaptureButton.textContent = 'Requesting Access...';
 
- // Initialize AudioContext on user interaction
  if (!audioContext) {
    try {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -428,9 +426,7 @@
   startListening();
   instructionScreen.classList.add('hidden');
   appContainer.classList.remove('hidden');
-  // MODIFICATION START: Show initial instruction message
   showInstructionMessage("Align the arrow with the red line to begin countdown.");
-  // MODIFICATION END
  } catch (err) {
   console.error("Camera error:", err);
   permissionError.textContent = "Camera access denied. Please check settings.";
@@ -499,7 +495,6 @@
 
  const pitchOffset = beta - TARGET_PITCH;
 
- // MODIFICATION START: Updated pre-scan logic
  if (scanState === 'pre-scan') {
   const topPercent = Math.max(5, Math.min(95, 50 + (pitchOffset * SENSITIVITY)));
   scanArrowContainer.style.top = `calc(${topPercent}% - ${ARROW_HALF_HEIGHT_PX}px)`;
@@ -515,7 +510,6 @@
    arrowShape.style.fill = COLOR_OK;
   }
  } else if (scanState === 'scanning') {
- // MODIFICATION END
   let degreesRotated = (startHeading - currentHeading + 360) % 360;
 
   if (!isVelocityCheckActive && degreesRotated > 10 && degreesRotated < 180) {
@@ -538,11 +532,9 @@
   previousHeading = currentHeading;
   lastHeadingTimestamp = currentTime;
 
-  // Corrected beep logic ramp
   const velocityRatio = Math.min(1, smoothedAngularVelocity / VELOCITY_WARNING_THRESHOLD);
   currentBeepInterval = MAX_BEEP_INTERVAL - (MAX_BEEP_INTERVAL - MIN_BEEP_INTERVAL) * velocityRatio;
    
-  // Corrected Warning Logic
   let warningMessageToShow = null;
   let isDangerCondition = false;
    
@@ -718,7 +710,7 @@
   isCapturing = false;
   currentHeading = 0;
   startHeading = 0;
-  isCountdownActive = false; // MODIFIED: countdownStartTimer removed
+  isCountdownActive = false;
   smoothedAngularVelocity = 0;
    
   progressDisplay.innerHTML = '';
