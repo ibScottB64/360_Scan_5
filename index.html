@@ -172,7 +172,6 @@
  .mask-right { top: 2%; bottom: 2%; right: 0; width: 5%; }
  .scan-overlay {
  position: absolute; top: 2%; left: 5%; right: 5%; bottom: 2%;
- border: 2px solid transparent;
  border-radius: 10px;
  z-index: 7;
  pointer-events: none;
@@ -195,19 +194,19 @@
  border-color: white;
  }
  .crop-mark.top-left {
- top: -2px; left: -2px;
+ top: 0; left: 0;
  border-width: 2px 0 0 2px;
  }
  .crop-mark.top-right {
- top: -2px; right: -2px;
+ top: 0; right: 0;
  border-width: 2px 2px 0 0;
  }
  .crop-mark.bottom-left {
- bottom: -2px; left: -2px;
+ bottom: 0; left: 0;
  border-width: 0 0 2px 2px;
  }
  .crop-mark.bottom-right {
- bottom: -2px; right: -2px;
+ bottom: 0; right: 0;
  border-width: 0 2px 2px 0;
  }
  .scan-arrow {
@@ -323,7 +322,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
- <div class="version-display">v 1.21</div>
+ <div class="version-display">v 1.22</div>
  <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
