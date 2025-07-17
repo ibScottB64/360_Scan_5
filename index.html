@@ -160,9 +160,44 @@
  #video-overlay.overlay-green { background-color: rgba(163, 230, 53, 0.30); }
  #video-overlay.overlay-red { background-color: rgba(231, 76, 60, 0.4); }
 
+ .scan-mask-area {
+ position: absolute;
+ background-color: rgba(0,0,0,0.4);
+ z-index: 6;
+ pointer-events: none;
+ }
+ .mask-top { top: 0; left: 0; right: 0; height: 2%; }
+ .mask-bottom { bottom: 0; left: 0; right: 0; height: 2%; }
+ .mask-left { top: 2%; bottom: 2%; left: 0; width: 5%; }
+ .mask-right { top: 2%; bottom: 2%; right: 0; width: 5%; }
  .scan-overlay {
  position: absolute; top: 2%; left: 5%; right: 5%; bottom: 2%;
  border: 3px dashed rgba(255, 255, 255, 0.7); border-radius: 10px;
+ z-index: 7;
+ pointer-events: none;
+ }
+ .crop-mark {
+ position: absolute;
+ width: 30px;
+ height: 30px;
+ border-style: solid;
+ border-color: white;
+ }
+ .crop-mark.top-left {
+ top: -3px; left: -3px;
+ border-width: 3px 0 0 3px;
+ }
+ .crop-mark.top-right {
+ top: -3px; right: -3px;
+ border-width: 3px 3px 0 0;
+ }
+ .crop-mark.bottom-left {
+ bottom: -3px; left: -3px;
+ border-width: 0 0 3px 3px;
+ }
+ .crop-mark.bottom-right {
+ bottom: -3px; right: -3px;
+ border-width: 0 3px 3px 0;
  }
  .scan-arrow {
  position: absolute; left: 10px;
@@ -191,6 +226,7 @@
  height: 6px;
  background-color: rgba(231, 76, 60, 0.75);
  transform: translateY(-50%);
+ z-index: 8;
  }
  #instructionMessageBox {
  display: none; position: absolute;
@@ -276,7 +312,7 @@
 <div id="instructionScreen" class="screen">
  <div id="top-bar-controls">
  <div class="close-btn" onclick="alert('Close button clicked. Functionality to be added later.')">&times;</div>
- <div class="version-display">v 1.16</div>
+ <div class="version-display">v 1.17</div>
  <div id="soundToggle" class="sound-toggle">s</div>
  </div>
  <div class="content">
@@ -302,7 +338,16 @@
  <div class="camera-view" id="camera-view">
  <video id="video-feed" autoplay playsinline muted></video>
  <div id="video-overlay"></div>
- <div class="scan-overlay"></div>
+ <div class="scan-mask-area mask-top"></div>
+ <div class="scan-mask-area mask-bottom"></div>
+ <div class="scan-mask-area mask-left"></div>
+ <div class="scan-mask-area mask-right"></div>
+ <div class="scan-overlay">
+  <div class="crop-mark top-left"></div>
+  <div class="crop-mark top-right"></div>
+  <div class="crop-mark bottom-left"></div>
+  <div class="crop-mark bottom-right"></div>
+ </div>
  <div id="scanArrowContainer" class="scan-arrow">
   <svg viewBox="0 0 23 30">
   <path id="arrow-shape" d="M0 12 L8 12 L8 5 L23 15 L8 25 L8 18 L0 18 Z" stroke="black" stroke-width="1.25" stroke-linejoin="round" />
